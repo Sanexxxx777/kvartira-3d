@@ -1,0 +1,1381 @@
+{
+  "id": "khrushchev-gi-3k",
+  "name": "ГИ · Трёхкомнатная квартира",
+  "ceiling": 2.5,
+  "door_head": 2.1,
+  "license": "CC-BY-SA-3.0",
+  "source": {
+    "title": "GI Planirovka 3K",
+    "author": "Melee",
+    "url": "https://commons.wikimedia.org/wiki/File:GI_Planirovka_3K.jpg",
+    "license": "CC-BY-SA-3.0"
+  },
+  "trace_notes": [
+    "Interpretive orthogonal trace of a skewed photograph, not a measured survey. Stairwell excluded. Exterior walls 350 mm; partitions 100 mm.",
+    "Printed lengths take priority. Room 2 is 2570 × 2270 mm = 5.8339 m² although the photo states 5.9 m². Bedroom depth inferred as 2945 mm from 8.6 m² / 2.92 m.",
+    "Living room has a 3630 mm main bay and a narrower lower bay beside the 2500 mm kitchen. Hall has an inferred stepped passage around the WC and closet. Its principal 1620 mm clear zone is shown by a dimension chain; partition positions and door swings are estimates.",
+    "Kitchen depth 2080 mm and bath depth 1173 mm are inferred from printed areas. Door openings and window widths are approximate. The shallow hall recess beside the bath is not a route to the kitchen; kitchen access is from the living room.",
+    "Renovation furniture and lighting are illustrative, not from the source image."
+  ],
+  "walls": [
+    [
+      -350,
+      -350,
+      450,
+      0,
+      "e"
+    ],
+    [
+      2050,
+      -350,
+      3180,
+      0,
+      "e"
+    ],
+    [
+      5080,
+      -350,
+      5940,
+      0,
+      "e"
+    ],
+    [
+      -350,
+      7766,
+      450,
+      8116,
+      "e"
+    ],
+    [
+      2000,
+      7766,
+      3300,
+      8116,
+      "e"
+    ],
+    [
+      5100,
+      7766,
+      5940,
+      8116,
+      "e"
+    ],
+    [
+      -350,
+      0,
+      0,
+      3500,
+      "e"
+    ],
+    [
+      -350,
+      4300,
+      0,
+      7766,
+      "e"
+    ],
+    [
+      5590,
+      0,
+      5940,
+      7766,
+      "e"
+    ],
+    [
+      2570,
+      0,
+      2670,
+      2945,
+      "n"
+    ],
+    [
+      0,
+      2270,
+      100,
+      2370,
+      "n"
+    ],
+    [
+      800,
+      2270,
+      2570,
+      2370,
+      "n"
+    ],
+    [
+      770,
+      2370,
+      870,
+      2395,
+      "n"
+    ],
+    [
+      1670,
+      2370,
+      1770,
+      2995,
+      "n"
+    ],
+    [
+      770,
+      2995,
+      1830,
+      3095,
+      "n"
+    ],
+    [
+      2470,
+      2995,
+      2670,
+      3095,
+      "n"
+    ],
+    [
+      2670,
+      2945,
+      2800,
+      3045,
+      "n"
+    ],
+    [
+      3600,
+      2945,
+      5590,
+      3045,
+      "n"
+    ],
+    [
+      1860,
+      3375,
+      1960,
+      5686,
+      "n"
+    ],
+    [
+      2570,
+      3095,
+      2670,
+      3475,
+      "n"
+    ],
+    [
+      0,
+      4313,
+      650,
+      4413,
+      "n"
+    ],
+    [
+      1350,
+      4313,
+      1720,
+      4413,
+      "n"
+    ],
+    [
+      1620,
+      4413,
+      1720,
+      5586,
+      "n"
+    ],
+    [
+      0,
+      5586,
+      1860,
+      5686,
+      "n"
+    ],
+    [
+      2500,
+      5686,
+      2600,
+      5900,
+      "n"
+    ],
+    [
+      2500,
+      6700,
+      2600,
+      7766,
+      "n"
+    ]
+  ],
+  "windows": [
+    [
+      450,
+      -350,
+      2050,
+      0,
+      0.85,
+      2.2
+    ],
+    [
+      3180,
+      -350,
+      5080,
+      0,
+      0.85,
+      2.2
+    ],
+    [
+      450,
+      7766,
+      2000,
+      8116,
+      0.95,
+      2.2
+    ],
+    [
+      3300,
+      7766,
+      5100,
+      8116,
+      0.85,
+      2.2
+    ]
+  ],
+  "doors": [
+    {
+      "name": "Вход",
+      "rect": [
+        -350,
+        3500,
+        0,
+        4300
+      ],
+      "h": [
+        0,
+        4300
+      ],
+      "c": [
+        0,
+        -1
+      ],
+      "o": [
+        1,
+        0
+      ],
+      "len": 800,
+      "entry": true
+    },
+    {
+      "name": "Комната",
+      "rect": [
+        100,
+        2270,
+        800,
+        2370
+      ],
+      "h": [
+        100,
+        2270
+      ],
+      "c": [
+        1,
+        0
+      ],
+      "o": [
+        0,
+        -1
+      ],
+      "len": 700
+    },
+    {
+      "name": "Спальня",
+      "rect": [
+        2800,
+        2945,
+        3600,
+        3045
+      ],
+      "h": [
+        2800,
+        2945
+      ],
+      "c": [
+        1,
+        0
+      ],
+      "o": [
+        0,
+        -1
+      ],
+      "len": 800
+    },
+    {
+      "name": "Туалет",
+      "rect": [
+        770,
+        2395,
+        870,
+        2995
+      ],
+      "h": [
+        870,
+        2395
+      ],
+      "c": [
+        0,
+        1
+      ],
+      "o": [
+        1,
+        0
+      ],
+      "len": 600
+    },
+    {
+      "name": "Ванная",
+      "rect": [
+        650,
+        4313,
+        1350,
+        4413
+      ],
+      "h": [
+        1350,
+        4313
+      ],
+      "c": [
+        -1,
+        0
+      ],
+      "o": [
+        0,
+        -1
+      ],
+      "len": 700
+    },
+    {
+      "name": "Кухня",
+      "rect": [
+        2500,
+        5900,
+        2600,
+        6700
+      ],
+      "h": [
+        2600,
+        5900
+      ],
+      "c": [
+        0,
+        1
+      ],
+      "o": [
+        1,
+        0
+      ],
+      "len": 800
+    }
+  ],
+  "slides": [
+    {
+      "rect": [
+        1830,
+        2995,
+        2470,
+        3095
+      ],
+      "v": false
+    },
+    {
+      "rect": [
+        1960,
+        3375,
+        2570,
+        3475
+      ],
+      "v": false
+    }
+  ],
+  "rooms": [
+    {
+      "id": "room",
+      "name": "Комната",
+      "poly": [
+        [
+          0,
+          0
+        ],
+        [
+          2570,
+          0
+        ],
+        [
+          2570,
+          2270
+        ],
+        [
+          0,
+          2270
+        ]
+      ],
+      "mat": "wood",
+      "at": [
+        1250,
+        1850
+      ],
+      "source_area": 5.9
+    },
+    {
+      "id": "bedroom",
+      "name": "Спальня",
+      "poly": [
+        [
+          2670,
+          0
+        ],
+        [
+          5590,
+          0
+        ],
+        [
+          5590,
+          2945
+        ],
+        [
+          2670,
+          2945
+        ]
+      ],
+      "mat": "wood",
+      "at": [
+        4200,
+        2550
+      ],
+      "source_area": 8.6
+    },
+    {
+      "id": "wc",
+      "name": "Туалет",
+      "poly": [
+        [
+          870,
+          2370
+        ],
+        [
+          1670,
+          2370
+        ],
+        [
+          1670,
+          2995
+        ],
+        [
+          870,
+          2995
+        ]
+      ],
+      "mat": "terrazzo",
+      "at": [
+        1270,
+        2790
+      ],
+      "source_area": 0.5
+    },
+    {
+      "id": "closet",
+      "name": "Кладовая",
+      "poly": [
+        [
+          1770,
+          2370
+        ],
+        [
+          2570,
+          2370
+        ],
+        [
+          2570,
+          2995
+        ],
+        [
+          1770,
+          2995
+        ]
+      ],
+      "mat": "wood",
+      "at": [
+        2170,
+        2810
+      ],
+      "source_area": 0.5
+    },
+    {
+      "id": "hall",
+      "name": "Прихожая",
+      "poly": [
+        [
+          0,
+          2370
+        ],
+        [
+          770,
+          2370
+        ],
+        [
+          770,
+          3095
+        ],
+        [
+          2570,
+          3095
+        ],
+        [
+          2570,
+          3375
+        ],
+        [
+          1860,
+          3375
+        ],
+        [
+          1860,
+          5586
+        ],
+        [
+          1720,
+          5586
+        ],
+        [
+          1720,
+          4313
+        ],
+        [
+          0,
+          4313
+        ]
+      ],
+      "mat": "terrazzo",
+      "at": [
+        900,
+        3820
+      ],
+      "source_area": 3.2
+    },
+    {
+      "id": "bath",
+      "name": "Ванная",
+      "poly": [
+        [
+          0,
+          4413
+        ],
+        [
+          1620,
+          4413
+        ],
+        [
+          1620,
+          5586
+        ],
+        [
+          0,
+          5586
+        ]
+      ],
+      "mat": "antislip",
+      "at": [
+        850,
+        5350
+      ],
+      "source_area": 1.9
+    },
+    {
+      "id": "kitchen",
+      "name": "Кухня",
+      "poly": [
+        [
+          0,
+          5686
+        ],
+        [
+          2500,
+          5686
+        ],
+        [
+          2500,
+          7766
+        ],
+        [
+          0,
+          7766
+        ]
+      ],
+      "mat": "terrazzo",
+      "at": [
+        1500,
+        7000
+      ],
+      "source_area": 5.2
+    },
+    {
+      "id": "living",
+      "name": "Гостиная",
+      "poly": [
+        [
+          2670,
+          3045
+        ],
+        [
+          5590,
+          3045
+        ],
+        [
+          5590,
+          7766
+        ],
+        [
+          2600,
+          7766
+        ],
+        [
+          2600,
+          5686
+        ],
+        [
+          1960,
+          5686
+        ],
+        [
+          1960,
+          3475
+        ],
+        [
+          2670,
+          3475
+        ]
+      ],
+      "mat": "wood",
+      "at": [
+        3800,
+        5800
+      ],
+      "source_area": 15.5
+    }
+  ],
+  "dims": [
+    {
+      "horiz": true,
+      "at": -950,
+      "start": 0,
+      "segs": [
+        2570,
+        100,
+        2920
+      ]
+    },
+    {
+      "horiz": false,
+      "at": 6400,
+      "start": -350,
+      "segs": [
+        8466
+      ]
+    },
+    {
+      "horiz": true,
+      "at": 8700,
+      "start": 0,
+      "segs": [
+        2500,
+        100,
+        2990
+      ]
+    },
+    {
+      "horiz": true,
+      "at": 3630,
+      "start": 0,
+      "segs": [
+        1620
+      ]
+    },
+    {
+      "horiz": true,
+      "at": 3950,
+      "start": 1960,
+      "segs": [
+        3630
+      ]
+    }
+  ],
+  "lights": [
+    {
+      "k": "spot",
+      "at": [
+        400,
+        2770
+      ]
+    },
+    {
+      "k": "spot",
+      "at": [
+        850,
+        3540
+      ]
+    },
+    {
+      "k": "spot",
+      "at": [
+        1300,
+        4050
+      ]
+    },
+    {
+      "k": "spot",
+      "at": [
+        400,
+        4800
+      ]
+    },
+    {
+      "k": "spot",
+      "at": [
+        1250,
+        5200
+      ]
+    },
+    {
+      "k": "spot",
+      "at": [
+        1250,
+        6400
+      ]
+    },
+    {
+      "k": "spot",
+      "at": [
+        2170,
+        2750
+      ]
+    },
+    {
+      "k": "pl",
+      "at": [
+        900,
+        3650
+      ]
+    },
+    {
+      "k": "pl",
+      "at": [
+        900,
+        5050
+      ]
+    },
+    {
+      "k": "pl",
+      "at": [
+        1250,
+        6500
+      ]
+    },
+    {
+      "k": "pl",
+      "at": [
+        1270,
+        2700
+      ]
+    },
+    {
+      "k": "pendant",
+      "at": [
+        1300,
+        1350
+      ],
+      "h": 2.12
+    },
+    {
+      "k": "pendant",
+      "at": [
+        4100,
+        2000
+      ],
+      "h": 2.15
+    },
+    {
+      "k": "pendant",
+      "at": [
+        3910,
+        6960
+      ],
+      "h": 1.9,
+      "style": "glass"
+    },
+    {
+      "k": "track",
+      "a": [
+        3750,
+        3800
+      ],
+      "b": [
+        3750,
+        5900
+      ]
+    },
+    {
+      "k": "sconce",
+      "at": [
+        2700,
+        500
+      ],
+      "dir": [
+        1,
+        0
+      ],
+      "h": 1.6,
+      "style": "spot"
+    },
+    {
+      "k": "led",
+      "pts": [
+        [
+          100,
+          5750
+        ],
+        [
+          100,
+          7300
+        ]
+      ]
+    },
+    {
+      "k": "pendant",
+      "at": [
+        1750,
+        6710
+      ],
+      "h": 1.9,
+      "style": "glass"
+    },
+    {
+      "k": "sconce",
+      "at": [
+        5560,
+        500
+      ],
+      "dir": [
+        -1,
+        0
+      ],
+      "h": 1.6,
+      "style": "spot"
+    }
+  ],
+  "furniture": [
+    {
+      "type": "rug",
+      "name": "Rug",
+      "cx": 3870,
+      "cy": 1660,
+      "w": 1750,
+      "d": 1900,
+      "rot": 0,
+      "color": "#d7cab3"
+    },
+    {
+      "type": "rug",
+      "name": "Rug",
+      "cx": 3890,
+      "cy": 5070,
+      "w": 2050,
+      "d": 1800,
+      "rot": 90,
+      "color": "#d1c3ac"
+    },
+    {
+      "type": "bed",
+      "name": "Single Bed",
+      "cx": 1050,
+      "cy": 680,
+      "w": 900,
+      "d": 1900,
+      "rot": 270,
+      "color": "#b9c5b3"
+    },
+    {
+      "type": "odesk",
+      "name": "Oak desk",
+      "cx": 2300,
+      "cy": 1520,
+      "w": 900,
+      "d": 500,
+      "rot": 90,
+      "color": "#d1af86"
+    },
+    {
+      "type": "chair",
+      "name": "Chair",
+      "cx": 1810,
+      "cy": 1520,
+      "w": 420,
+      "d": 430,
+      "rot": 270,
+      "color": "#a8957c"
+    },
+    {
+      "type": "tallcab",
+      "name": "Tall cabinet",
+      "cx": 2300,
+      "cy": 410,
+      "w": 500,
+      "d": 550,
+      "rot": 0,
+      "color": "#e6ddce",
+      "ht": 2.35,
+      "rows": 2,
+      "hd": "edge"
+    },
+    {
+      "type": "bed",
+      "name": "Double Bed",
+      "cx": 3780,
+      "cy": 1180,
+      "w": 1400,
+      "d": 2000,
+      "rot": 0,
+      "color": "#c1c9bc"
+    },
+    {
+      "type": "nightstand",
+      "name": "Nightstand",
+      "cx": 2880,
+      "cy": 400,
+      "w": 350,
+      "d": 350,
+      "rot": 0,
+      "color": "#e6ddce"
+    },
+    {
+      "type": "wardrobe",
+      "name": "Wardrobe",
+      "cx": 5280,
+      "cy": 1620,
+      "w": 1500,
+      "d": 600,
+      "rot": 90,
+      "color": "#e6ddce"
+    },
+    {
+      "type": "toilet",
+      "name": "Toilet",
+      "cx": 1270,
+      "cy": 2700,
+      "w": 350,
+      "d": 590,
+      "rot": 90,
+      "color": "#f5f4ef"
+    },
+    {
+      "type": "oshelf",
+      "name": "Open shelves",
+      "cx": 2170,
+      "cy": 2600,
+      "w": 760,
+      "d": 430,
+      "rot": 0,
+      "color": "#d7bf9b",
+      "led": "both"
+    },
+    {
+      "type": "topbox",
+      "name": "Overhead cabinet",
+      "cx": 2170,
+      "cy": 2600,
+      "w": 760,
+      "d": 430,
+      "rot": 0,
+      "color": "#e6ddce"
+    },
+    {
+      "type": "shoecab",
+      "name": "Shoe Cabinet",
+      "cx": 240,
+      "cy": 3330,
+      "w": 700,
+      "d": 320,
+      "rot": 270,
+      "color": "#e6ddce"
+    },
+    {
+      "type": "hooks",
+      "name": "Coat hooks",
+      "cx": 90,
+      "cy": 3330,
+      "w": 650,
+      "d": 100,
+      "rot": 270,
+      "color": "#e6ddce"
+    },
+    {
+      "type": "mirror",
+      "name": "Mirror",
+      "cx": 1600,
+      "cy": 3860,
+      "w": 600,
+      "d": 40,
+      "rot": 90,
+      "color": "#e6ddce",
+      "ht": 1.2,
+      "y0": 1.15
+    },
+    {
+      "type": "shower",
+      "name": "Shower",
+      "cx": 430,
+      "cy": 5150,
+      "w": 800,
+      "d": 800,
+      "rot": 0,
+      "color": "#d7e6e5"
+    },
+    {
+      "type": "vanity",
+      "name": "Vanity",
+      "cx": 1370,
+      "cy": 4960,
+      "w": 500,
+      "d": 400,
+      "rot": 90,
+      "color": "#a9b8a2",
+      "mirror": false
+    },
+    {
+      "type": "boiler",
+      "name": "Boiler",
+      "cx": 230,
+      "cy": 4640,
+      "w": 360,
+      "d": 250,
+      "rot": 270,
+      "color": "#f2f0e9"
+    },
+    {
+      "type": "counter",
+      "name": "Kitchen Counter",
+      "cx": 310,
+      "cy": 6540,
+      "w": 1650,
+      "d": 600,
+      "rot": 270,
+      "color": "#d5ddd1"
+    },
+    {
+      "type": "ksink",
+      "name": "Sink",
+      "cx": 310,
+      "cy": 6070,
+      "w": 550,
+      "d": 450,
+      "rot": 270,
+      "color": "#e2e7e5"
+    },
+    {
+      "type": "stove",
+      "name": "Gas Stove",
+      "cx": 310,
+      "cy": 6960,
+      "w": 450,
+      "d": 430,
+      "rot": 270,
+      "color": "#343a37"
+    },
+    {
+      "type": "fridge",
+      "name": "Fridge",
+      "cx": 2100,
+      "cy": 7330,
+      "w": 600,
+      "d": 650,
+      "rot": 180,
+      "color": "#dfdfd6"
+    },
+    {
+      "type": "washdry",
+      "name": "Washer + dryer",
+      "cx": 940,
+      "cy": 5990,
+      "w": 600,
+      "d": 590,
+      "rot": 0,
+      "color": "#e8e6de",
+      "lift": 0.08
+    },
+    {
+      "type": "art",
+      "name": "Wall art",
+      "cx": 1370,
+      "cy": 5740,
+      "w": 550,
+      "d": 40,
+      "rot": 0,
+      "color": "#bb835d",
+      "ht": 0.55,
+      "y0": 1.4
+    },
+    {
+      "type": "sofa",
+      "name": "3-Seat Sofa",
+      "cx": 5100,
+      "cy": 5050,
+      "w": 2100,
+      "d": 880,
+      "rot": 90,
+      "color": "#a9b8a2"
+    },
+    {
+      "type": "floatcab",
+      "name": "Floating cabinet",
+      "cx": 2160,
+      "cy": 5000,
+      "w": 1450,
+      "d": 360,
+      "rot": 270,
+      "color": "#caa77d",
+      "ht": 0.32,
+      "y0": 0.3,
+      "rows": 1,
+      "hd": "none",
+      "top": "#e6ddce"
+    },
+    {
+      "type": "tv",
+      "name": "55\" TV",
+      "cx": 2110,
+      "cy": 5000,
+      "w": 1230,
+      "d": 60,
+      "rot": 270,
+      "color": "#242627"
+    },
+    {
+      "type": "coffeetable",
+      "name": "Coffee Table",
+      "cx": 3950,
+      "cy": 5050,
+      "w": 1000,
+      "d": 500,
+      "rot": 90,
+      "color": "#d1af86"
+    },
+    {
+      "type": "plant",
+      "name": "Plant",
+      "cx": 5240,
+      "cy": 3750,
+      "w": 450,
+      "d": 450,
+      "rot": 0,
+      "color": "#91aa81"
+    },
+    {
+      "type": "floorlamp",
+      "name": "Floor Lamp",
+      "cx": 5220,
+      "cy": 6420,
+      "w": 370,
+      "d": 370,
+      "rot": 0,
+      "color": "#373a32"
+    },
+    {
+      "type": "roundtable",
+      "name": "Round Table",
+      "cx": 3910,
+      "cy": 6960,
+      "w": 900,
+      "d": 900,
+      "rot": 0,
+      "color": "#cfa879"
+    },
+    {
+      "type": "chair",
+      "name": "Dining Chair",
+      "cx": 3240,
+      "cy": 6960,
+      "w": 440,
+      "d": 460,
+      "rot": 270,
+      "color": "#b7c0aa"
+    },
+    {
+      "type": "chair",
+      "name": "Dining Chair",
+      "cx": 4560,
+      "cy": 6960,
+      "w": 440,
+      "d": 460,
+      "rot": 90,
+      "color": "#b7c0aa"
+    },
+    {
+      "type": "art",
+      "name": "Wall art",
+      "cx": 5540,
+      "cy": 5050,
+      "w": 1000,
+      "d": 40,
+      "rot": 90,
+      "color": "#c58b69",
+      "ht": 0.7,
+      "y0": 1.25,
+      "c2": "#778a75"
+    },
+    {
+      "type": "art",
+      "name": "Wall art",
+      "cx": 4100,
+      "cy": 3090,
+      "w": 800,
+      "d": 40,
+      "rot": 0,
+      "color": "#d5be95",
+      "ht": 0.6,
+      "y0": 1.3,
+      "c2": "#5f796f"
+    },
+    {
+      "type": "art",
+      "name": "Wall art",
+      "cx": 2520,
+      "cy": 1300,
+      "w": 650,
+      "d": 40,
+      "rot": 90,
+      "color": "#b79576",
+      "ht": 0.65,
+      "y0": 1.4
+    },
+    {
+      "type": "curtain",
+      "name": "Curtains",
+      "cx": 1250,
+      "cy": 110,
+      "w": 1850,
+      "d": 180,
+      "rot": 0,
+      "color": "#b9b3a1",
+      "sheer": true,
+      "open": 0.14
+    },
+    {
+      "type": "curtain",
+      "name": "Curtains",
+      "cx": 4130,
+      "cy": 110,
+      "w": 2200,
+      "d": 180,
+      "rot": 0,
+      "color": "#b9b3a1",
+      "sheer": true,
+      "open": 0.14
+    },
+    {
+      "type": "curtain",
+      "name": "Curtains",
+      "cx": 1225,
+      "cy": 7656,
+      "w": 1800,
+      "d": 180,
+      "rot": 180,
+      "color": "#b9b3a1",
+      "sheer": true,
+      "open": 0.14
+    },
+    {
+      "type": "curtain",
+      "name": "Curtains",
+      "cx": 4200,
+      "cy": 7656,
+      "w": 2100,
+      "d": 180,
+      "rot": 180,
+      "color": "#b9b3a1",
+      "sheer": true,
+      "open": 0.14
+    },
+    {
+      "type": "cabinet",
+      "name": "Storage Cabinet",
+      "cx": 1740,
+      "cy": 3850,
+      "w": 900,
+      "d": 240,
+      "rot": 90,
+      "color": "#e6ddce"
+    },
+    {
+      "type": "drawers",
+      "name": "Dresser on legs",
+      "cx": 4580,
+      "cy": 2750,
+      "w": 1100,
+      "d": 350,
+      "rot": 180,
+      "color": "#e6ddce",
+      "ht": 0.78,
+      "legs": 0.14,
+      "humid": true
+    },
+    {
+      "type": "mirror",
+      "name": "Mirror",
+      "cx": 1575,
+      "cy": 4960,
+      "w": 430,
+      "d": 40,
+      "rot": 90,
+      "color": "#e6ddce",
+      "shape": "oval",
+      "ht": 0.85,
+      "y0": 1.15
+    },
+    {
+      "type": "towelrail",
+      "name": "Heated towel rail",
+      "cx": 1200,
+      "cy": 5500,
+      "w": 450,
+      "d": 100,
+      "rot": 180,
+      "color": "#f2f0e9",
+      "ht": 1.15,
+      "y0": 0.4
+    },
+    {
+      "type": "gbox",
+      "name": "Podium / block",
+      "cx": 940,
+      "cy": 5990,
+      "w": 620,
+      "d": 600,
+      "rot": 0,
+      "color": "#e6ddce",
+      "ht": 0.08,
+      "y0": 0
+    },
+    {
+      "type": "table",
+      "name": "Dining Table",
+      "cx": 1750,
+      "cy": 6710,
+      "w": 700,
+      "d": 500,
+      "rot": 0,
+      "color": "#d1af86"
+    },
+    {
+      "type": "chair",
+      "name": "Dining Chair",
+      "cx": 1750,
+      "cy": 6260,
+      "w": 400,
+      "d": 420,
+      "rot": 180,
+      "color": "#b7c0aa"
+    }
+  ]
+}

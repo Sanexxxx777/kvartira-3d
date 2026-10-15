@@ -1,0 +1,1774 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#fffdf9">
+<title>户型装修设计</title>
+<style>
+:root{
+  --bg:#f3efe7; --paper:#f7f4ee; --panel:#fffdf9; --line:#e3dccf; --ink:#2b2824; --muted:#8a8174;
+  --accent:#b5653a; --accent-soft:#f3e3d8; --teal:#2f5d62;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);overflow:hidden;overscroll-behavior:none;touch-action:manipulation;
+  -webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;
+  font:13px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+button,input,select{font:inherit;color:inherit}
+.app{display:grid;grid-template-rows:auto minmax(0,1fr) 30px;grid-template-columns:236px minmax(0,1fr) 300px;height:100vh;height:100dvh;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input{-webkit-user-select:text;user-select:text}
+header{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:8px 14px;
+  background:var(--panel);border-bottom:1px solid var(--line)}
+.brand{display:flex;flex-direction:column;margin-right:8px;line-height:1.25}
+.brand b{font-size:15px;letter-spacing:.5px}
+.brand span{color:var(--muted);font-size:12px}
+.grp{display:flex;align-items:center;gap:2px;padding:2px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.btn{border:0;background:transparent;padding:5px 9px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.btn:hover{background:#f2ece2}
+.btn.on{background:var(--ink);color:#fff}
+.btn.chip.on{background:var(--accent-soft);color:var(--accent)}
+#langSel .btn{min-width:32px;font-weight:500}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.primary:hover{background:#9f5530}
+.btn.danger{color:#b3372a}
+.spacer{flex:1}
+aside{background:var(--panel);overflow:auto;border-right:1px solid var(--line)}
+aside.right{border-right:0;border-left:1px solid var(--line)}
+.lib h4{margin:0;padding:12px 14px 6px;font-size:12px;color:var(--muted);font-weight:600;letter-spacing:1px}
+.lib-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 10px 6px}
+.lib h4{position:sticky;top:0;z-index:1;background:var(--panel)}
+.item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px 6px;border:1px solid var(--line);
+  border-radius:8px;background:#fff;cursor:grab;user-select:none;touch-action:pan-y;transition:border-color .15s,transform .15s}
+.item.dragging{border-color:var(--accent);opacity:.5}
+@media (hover:hover){.item:hover{border-color:var(--accent);transform:translateY(-1px)}}
+#ghost{position:fixed;left:0;top:0;z-index:30;pointer-events:none;opacity:.8;transform:translate(-50%,-50%);filter:drop-shadow(0 4px 10px rgba(40,30,20,.3))}
+#ghost svg{width:100%;height:100%;display:block;overflow:visible}
+.item svg{width:56px;height:44px}
+.item b{font-weight:500;font-size:12px}
+.item small{color:var(--muted);font-size:11px}
+.hint{padding:10px 14px 16px;color:var(--muted);font-size:12px}
+main{position:relative;overflow:hidden;background:var(--paper)}
+#plan{width:100%;height:100%;display:block;touch-action:none;cursor:default}
+#plan.panning{cursor:grabbing}
+#plan.tool-measure{cursor:crosshair}
+#plan .wall{pointer-events:none}
+#plan.tool-demolish .wall{pointer-events:all;cursor:pointer}
+#plan.tool-demolish .wall:hover{fill:#d9894f}
+#plan.tool-select .room:hover{opacity:.82}
+#plan .furn{cursor:move}
+@media (hover:hover){#plan .furn:hover{filter:drop-shadow(0 0 2px rgba(181,101,58,.7))}}
+[data-handle]{cursor:pointer}
+[data-handle=size]{cursor:nwse-resize}
+.scalebar{position:absolute;left:14px;bottom:12px;background:rgba(255,253,249,.92);border:1px solid var(--line);
+  border-radius:8px;padding:6px 10px;font-size:12px;pointer-events:none}
+.scalebar .bar{height:6px;border:1.5px solid var(--ink);border-top:0;margin-top:3px}
+.modehint{position:absolute;left:50%;top:12px;transform:translateX(-50%);background:var(--ink);color:#fff;
+  padding:5px 12px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .2s;pointer-events:none}
+.modehint.show{opacity:.9}
+footer{grid-column:1/-1;display:flex;gap:18px;align-items:center;padding:0 14px;background:var(--panel);overflow:hidden;white-space:nowrap;
+  border-top:1px solid var(--line);color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+#tip{overflow:hidden;text-overflow:ellipsis}
+footer b{color:var(--ink);font-weight:500}
+#panel section{padding:12px 16px;border-bottom:1px solid var(--line)}
+#panel h3{margin:0 0 8px;font-size:13px}
+#panel h3 small{color:var(--muted);font-weight:400;margin-left:6px}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+td{padding:4px 2px;border-bottom:1px dashed #eee6d9}
+td.r{text-align:right}
+tr.click{cursor:pointer}
+tr.click:hover td{background:#faf5ee}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;border:1px solid rgba(0,0,0,.15);vertical-align:-2px;margin-right:6px}
+.total{display:flex;justify-content:space-between;margin-top:8px;font-size:14px}
+.total b{color:var(--accent)}
+.muted{color:var(--muted)}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.form label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
+.form label.full{grid-column:1/-1}
+.form input,.form select{border:1px solid var(--line);border-radius:6px;padding:5px 7px;background:#fff;width:100%}
+.form input[type=color]{padding:2px;height:30px}
+.actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.actions .btn{border:1px solid var(--line);background:#fff}
+.mats{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mat{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:6px;background:#fff;cursor:pointer;text-align:left}
+.mat.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.mat i{width:26px;height:26px;border-radius:5px;border:1px solid rgba(0,0,0,.12);flex:none}
+.mat span{font-size:12px;line-height:1.3}
+.mat small{display:block;color:var(--muted)}
+.kbd{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;color:var(--muted)}
+kbd{font:11px ui-monospace,Menlo,monospace;background:#f2ece2;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;color:var(--ink)}
+.big{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
+.stats div{background:#faf6ef;border-radius:8px;padding:8px}
+.stats small{display:block;color:var(--muted);font-size:11px}
+#toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
+  padding:8px 16px;border-radius:8px;opacity:0;transition:.25s;pointer-events:none;z-index:10}
+#toast.show{opacity:1;transform:translateX(-50%)}
+/* ---------- 2D / 3D 切换 ---------- */
+.seg{position:relative;padding:3px}
+.seg .btn{position:relative;z-index:1;width:82px;transition:color .45s}
+.seg .btn:hover{background:transparent}
+.seg .pill{position:absolute;left:3px;top:3px;bottom:3px;width:82px;border-radius:6px;background:var(--accent);
+  box-shadow:0 2px 6px rgba(181,101,58,.35);transition:transform .5s cubic-bezier(.65,0,.35,1)}
+.seg .btn[data-view="2d"],body.m3d .seg .btn[data-view="3d"]{color:#fff}
+body.m3d .seg .btn[data-view="2d"]{color:var(--ink)}
+body.m3d .seg .pill{transform:translateX(84px)}
+body.busy .seg{pointer-events:none}
+body.m3d .only2d,body:not(.m3d) .only3d{display:none!important}
+.only2d,.only3d{animation:fadeIn .45s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+#plan{transition:opacity .45s ease,transform .45s ease}
+main.is3d #plan{opacity:0;pointer-events:none}
+.scalebar{transition:opacity .3s}
+main.is3d .scalebar{opacity:0}
+#view3d{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s linear .45s}
+main.is3d #view3d{opacity:1;visibility:visible;transition:opacity .45s ease}
+#view3d canvas{display:block;outline:none}
+#walkOverlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(30,28,25,.35);z-index:3;cursor:pointer}
+#walkOverlay>div{background:var(--panel);border-radius:14px;padding:22px 28px;text-align:center;max-width:360px}
+#walkOverlay h3{margin:0 0 6px}
+#walkOverlay p{margin:4px 0;color:var(--muted)}
+#cross{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;z-index:2;display:none;pointer-events:none}
+#cross:before,#cross:after{content:"";position:absolute;background:#fff;box-shadow:0 0 2px #000}
+#cross:before{left:6px;top:0;width:2px;height:14px}#cross:after{top:6px;left:0;height:2px;width:14px}
+#hint3d{position:absolute;left:50%;top:12px;transform:translateX(-50%);background:rgba(43,40,36,.82);color:#fff;border-radius:20px;
+  padding:5px 14px;font-size:12px;z-index:2;pointer-events:none;white-space:nowrap;transition:opacity .4s}
+main.animating #hint3d{opacity:0}
+.rlabel{font-size:12px;font-weight:600;color:#2b2824;background:rgba(255,253,249,.9);border:1px solid var(--line);
+  border-radius:12px;padding:2px 9px;white-space:nowrap;pointer-events:none}
+.rlabel small{font-weight:400;color:var(--muted);margin-left:4px}
+#roomList{padding:0 10px 6px;display:grid;grid-template-columns:1fr 1fr;gap:4px}
+#roomList button{display:flex;flex-direction:column;width:100%;border:1px solid var(--line);background:#fff;padding:5px 8px;border-radius:7px;cursor:pointer;text-align:left;line-height:1.3}
+#roomList button:hover{background:#f2ece2}
+#roomList button.on{background:var(--accent-soft);color:var(--accent)}
+#roomList small{color:var(--muted);font-variant-numeric:tabular-nums}
+.range{display:flex;align-items:center;gap:6px;padding:0 8px;color:var(--muted);font-size:12px}
+.range input{width:100px;accent-color:var(--accent)}
+.menu{position:relative}
+.menu summary{list-style:none;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px}
+.menu summary::-webkit-details-marker{display:none}
+.menu-pop{position:absolute;right:0;top:calc(100% + 6px);display:flex;flex-direction:column;min-width:150px;background:#fff;
+  border:1px solid var(--line);border-radius:10px;padding:4px;box-shadow:0 10px 30px rgba(40,30,20,.14);z-index:20;animation:fadeIn .2s ease}
+.menu-pop .btn{text-align:left}
+.range span{font-variant-numeric:tabular-nums;color:var(--ink)}
+/* ---------- 选中后的浮动工具条 ---------- */
+#fab{position:absolute;left:50%;bottom:16px;transform:translate(-50%,12px);display:flex;align-items:center;gap:4px;padding:5px;
+  background:rgba(255,253,249,.97);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 26px rgba(40,30,20,.16);
+  z-index:4;opacity:0;visibility:hidden;transition:opacity .2s,transform .2s,visibility 0s linear .2s;max-width:calc(100% - 24px)}
+main.drawer-panel #fab{opacity:0;visibility:hidden}
+#fab.show{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity .2s,transform .2s}
+#fab .name{padding:0 8px 0 6px;font-weight:600;max-width:9em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#fab .btn{border:1px solid transparent}
+#fab .sep{width:1px;align-self:stretch;margin:4px 2px;background:var(--line)}
+/* ---------- 触屏漫游摇杆 ---------- */
+#joy{position:absolute;left:28px;bottom:28px;width:130px;height:130px;border-radius:50%;background:rgba(255,253,249,.25);
+  border:2px solid rgba(255,255,255,.7);box-shadow:0 4px 18px rgba(0,0,0,.18);z-index:3;display:none;touch-action:none;backdrop-filter:blur(3px)}
+#joy i{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:rgba(255,253,249,.92);
+  box-shadow:0 2px 8px rgba(0,0,0,.25);pointer-events:none}
+#walkExit{position:absolute;right:16px;bottom:28px;z-index:3;display:none}
+/* ---------- 触屏：加大点击区域 ---------- */
+@media (pointer:coarse){
+  body{font-size:14px}
+  header{padding:8px 12px;gap:8px}
+  .grp{padding:3px;border-radius:10px}
+  .btn{padding:8px 12px;min-height:38px;border-radius:8px}
+  .seg .btn,.seg .pill{width:92px}
+  body.m3d .seg .pill{transform:translateX(94px)}
+  .menu summary{padding:9px 14px}
+  .menu-pop .btn{padding:11px 14px}
+  .item{padding:10px 4px 8px}
+  .form input,.form select{font-size:16px;padding:8px 9px}
+  .form input[type=color]{height:40px}
+  .actions .btn,#fab .btn{min-height:42px;padding:9px 14px}
+  td{padding:7px 2px}
+  #roomList button{padding:8px 10px}
+  .mat{padding:9px 8px}
+  .range input{width:120px!important}
+}
+/* ---------- 竖屏 / 窄屏（如 iPad 竖握）：侧栏改为抽屉 ---------- */
+/* ---------- 宽屏：左右面板可收起 ---------- */
+@media (min-width:1101px){
+  .app{transition:grid-template-columns .3s cubic-bezier(.3,.7,.3,1)}
+  .app.hide-lib{grid-template-columns:0 minmax(0,1fr) 300px}
+  .app.hide-panel{grid-template-columns:236px minmax(0,1fr) 0}
+  .app.hide-lib.hide-panel{grid-template-columns:0 minmax(0,1fr) 0}
+  .app.hide-lib aside.lib,.app.hide-panel aside.right{overflow:hidden;border:0}
+  aside{overflow-x:hidden}
+  aside.lib>div{min-width:220px} #panel{min-width:284px}   /* 收起动画中内容不被挤压变形 */
+}
+.narrow-only{display:none!important}
+@media (max-width:1100px){
+  .grp.narrow-only{display:flex!important}
+  .btn.narrow-only,#fab .btn.narrow-only{display:inline-block!important}
+  .app{grid-template-columns:minmax(0,1fr)}
+  main,aside.lib,aside.right{grid-row:2;grid-column:1}
+  aside.lib,aside.right{position:relative;z-index:6;width:min(320px,86vw);transition:transform .3s cubic-bezier(.3,.7,.3,1),box-shadow .3s}
+  aside.lib{justify-self:start;transform:translateX(-110%)}
+  aside.right{justify-self:end;transform:translateX(110%)}
+  aside.open{transform:none;box-shadow:0 0 30px rgba(40,30,20,.18)}
+  .lib-grid{grid-template-columns:1fr 1fr 1fr}
+  .brand span,footer .only2d{display:none!important}
+}
+/* Additions keep the upstream paper, oak and charcoal palette. */
+dialog{color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px;max-width:min(500px,calc(100vw - 28px));box-shadow:0 16px 70px #201c1833}
+dialog::backdrop{background:#241f1966}dialog p{white-space:pre-line}dialog .actions{justify-content:flex-end;margin-top:20px}dialog input[type=checkbox]{width:auto;align-self:start}
+#underlayHint{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:12;background:var(--ink);color:white;padding:10px 18px;border-radius:10px;max-width:90vw;pointer-events:none}
+#plan.has-underlay #gRooms{opacity:.4}
+#plan.has-underlay #gUnderlay{pointer-events:none}
+.brand b{max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:600px){header{gap:4px;padding:6px}.brand{order:-1;width:100%}.brand b{max-width:95vw}.btn{padding:5px 7px}#langSel .btn{min-width:28px}.menu-pop{max-height:65vh;overflow:auto}#modehint{max-width:90%;border-radius:10px}.range input{max-width:80px}}
+
+body.busy details.menu{pointer-events:none;opacity:.5}
+
+</style>
+
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="grp" id="paneBtns">
+      <button class="btn chip" id="tgLib" data-en="◧ Library">◧ 家具库</button>
+      <button class="btn chip" id="tgPanel" data-en="Properties ◨">属性 ◨</button>
+    </div>
+    <div class="brand"><b data-en="3BR 2LR 2BA · Interior Design">三室两厅两卫 · 装修设计</b><span id="subtitle">原始户型 1:60 · 尺寸单位 mm</span></div>
+    <div class="grp seg" id="viewSeg" title="切换 2D / 3D (T)" data-en-title="Switch 2D / 3D (T)">
+      <span class="pill"></span>
+      <button class="btn" data-view="2d" data-en="2D Plan">2D 平面</button>
+      <button class="btn" data-view="3d" data-en="3D Scene">3D 场景</button>
+    </div>
+    <div class="grp only2d" id="tools">
+      <button class="btn on" data-tool="select" title="选择 / 移动 (V)" data-en-title="Select / Move (V)" data-en="Select">选择</button>
+      <button class="btn" data-tool="measure" title="测量 (M)" data-en-title="Measure (M)" data-en="Measure">测量</button>
+      <button class="btn" data-tool="demolish" title="拆改非承重墙 (X)" data-en-title="Demolish non-bearing walls (X)" data-en="Demolish">拆改墙体</button>
+    </div>
+    <div class="grp only2d">
+      <button class="btn" id="zoomOut" title="缩小" data-en-title="Zoom out">−</button>
+      <button class="btn" id="zoomIn" title="放大" data-en-title="Zoom in">＋</button>
+      <button class="btn" id="fit" title="适应窗口 (F)" data-en-title="Fit to window (F)" data-en="Fit">适应</button>
+      <button class="btn" id="s60" title="按 1:60 显示（与原图同比例）" data-en-title="Show at 1:60 (same scale as the original plan)">1:60</button>
+      <button class="btn" id="s100" title="按 1:100 显示" data-en-title="Show at 1:100">1:100</button>
+    </div>
+    <div class="grp only3d" id="modes3d">
+      <button class="btn on" data-mode="orbit" data-en="Orbit">鸟瞰</button>
+      <button class="btn" data-mode="walk" data-en="Walk">漫游</button>
+    </div>
+    <div class="grp only3d">
+      <button class="btn" id="vIso" data-en="Iso">斜视</button>
+      <button class="btn" id="vTop" data-en="Top">俯视</button>
+    </div>
+    <div class="grp">
+      <button class="btn" id="undo" title="撤销 (Ctrl+Z)" data-en-title="Undo (Ctrl+Z)" data-en="Undo">撤销</button>
+      <button class="btn" id="redo" title="重做 (Ctrl+Shift+Z)" data-en-title="Redo (Ctrl+Shift+Z)" data-en="Redo">重做</button>
+      <button class="btn danger" id="clearAll" title="清空所有家具家电（可撤销）" data-en-title="Remove all furniture and appliances (undoable)" data-en="Clear">清空布置</button>
+    </div>
+    <div class="grp only2d" id="layers">
+      <button class="btn chip on" data-layer="dims" data-en="Dims">尺寸</button>
+      <button class="btn chip on" data-layer="labels" data-en="Rooms">房间</button>
+      <button class="btn chip on" data-layer="furn" data-en="Furniture">家具</button>
+      <button class="btn chip" data-layer="grid" data-en="Grid">网格</button>
+      <button class="btn chip" data-layer="bearing" data-en="Bearing walls">承重墙</button>
+      <button class="btn chip on" data-layer="wallSnap" title="拖动家具时贴墙吸附" data-en-title="Snap furniture to walls while dragging" data-en="Wall snap">贴墙吸附</button>
+    </div>
+    <div class="grp only3d">
+      <button class="btn chip on" data-full-cut data-cut="2.5" data-en="Full walls">全高墙</button>
+      <button class="btn chip" data-cut="1.2" data-en="Cut walls">剖切墙</button>
+    </div>
+    <div class="grp only3d" id="toggles3d">
+      <button class="btn chip on" data-t="furn" data-en="Furniture">家具</button>
+      <button class="btn chip on" data-t="labels" data-en="Labels">房间名</button>
+      <button class="btn chip" data-t="night" data-en="Night">夜景</button>
+    </div>
+    <div class="grp only3d"><label class="range"><span data-en="Sun">日照</span> <input type="range" id="sun" min="7" max="18" step=".25" value="10" style="width:84px"><span id="sunT">10:00</span></label></div>
+    <div class="spacer"></div>
+    <div class="grp" id="langSel" role="group" aria-label="Language / 语言">
+      <button class="btn chip" data-lang="zh" title="简体中文">简</button>
+      <button class="btn chip" data-lang="zht" title="繁體中文">繁</button>
+      <button class="btn chip" data-lang="en" title="English">EN</button>
+      <button class="btn chip" data-lang="ru" title="Русский">RU</button>
+    </div>
+    <button class="btn" id="fullscreen" title="全屏 (Shift+F)" style="border:1px solid var(--line);background:#fff">⛶ 全屏</button>
+    <details class="menu"><summary class="btn" data-en="File ▾">文件 ▾</summary>
+      <div class="menu-pop">
+        <button class="btn" id="exportPng" data-en="Export image">导出图片</button>
+        <button class="btn" id="exportJson" data-en="Export plan JSON">导出方案 JSON</button>
+        <button class="btn" id="importJson" data-en="Import plan">导入方案</button>
+        <button class="btn" id="underlayBtn" data-en="Underlay…">底图…</button>
+        <button class="btn danger" id="reset" data-en="Reset to default">重置为默认方案</button>
+      </div></details>
+    <input type="file" id="fileIn" accept=".json,application/json" hidden>
+  </header>
+
+  <aside class="lib">
+    <div id="lib3d" class="only3d">
+      <h4 data-en="Rooms · click to fly there">房间 · 点击飞到该房间</h4>
+      <div id="roomList"></div>
+    </div>
+    <div id="lib"></div>
+  </aside>
+
+  <main id="stage">
+    <svg id="plan" class="tool-select" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+      <defs id="defs"></defs>
+      <g id="gGrid"></g>
+      <g id="gUnderlay" pointer-events="none"></g>
+      <g id="gRooms"></g>
+      <g id="gFurn"></g>
+      <g id="gWalls"></g>
+      <g id="gOpen"></g>
+      <g id="gLabels" pointer-events="none"></g>
+      <g id="gDims" pointer-events="none"></g>
+      <g id="gMeasure" pointer-events="none"></g>
+      <g id="gSel"></g>
+    </svg>
+    <div id="view3d">
+      <div id="walkOverlay"><div><h3 data-en="Walk mode">漫游模式</h3>
+        <p id="wo1"></p>
+        <p id="wo2"></p>
+        <p id="wo3"></p></div></div>
+      <div id="cross"></div>
+      <div id="joy"><i></i></div>
+      <button class="btn primary" id="walkExit" data-en="Exit walk">退出漫游</button>
+      <div id="hint3d"></div>
+    </div>
+    <div class="scalebar" id="scalebar"><span id="sbText">1 m</span><div class="bar" id="sbBar"></div></div>
+    <div class="modehint" id="modehint"></div>
+    <div id="fab"></div>
+  </main>
+
+  <aside class="right"><div id="panel"></div></aside>
+
+  <footer>
+    <span class="only2d">X <b id="cx">—</b></span><span class="only2d">Y <b id="cy">—</b></span>
+    <span class="only2d"><span data-en="Scale">当前比例</span> <b id="ratio">—</b></span>
+    <span id="hover" class="only2d"></span>
+    <span class="spacer"></span>
+    <span id="tip"></span>
+  </footer>
+</div>
+<div id="toast"></div>
+<dialog id="planDialog" aria-labelledby="planDialogTitle"><form method="dialog">
+  <h3 id="planDialogTitle"></h3><p id="planDialogText"></p>
+  <div class="form"><label id="dialogInputLabel" class="full"><span id="dialogInputText"></span><input id="dialogInput" type="number" min="1" step="any"></label></div>
+  <div class="actions"><button class="btn" value="cancel" id="dialogCancel"></button><button class="btn primary" value="ok" id="dialogOK"></button></div>
+</form></dialog>
+<dialog id="underlayDialog" aria-labelledby="underlayTitle">
+  <h3 id="underlayTitle" data-en="Tracing underlay">描图底图</h3>
+  <p data-en="Load an image, then calibrate two points. Alt-drag moves it in 2D. The image is stored only in this browser, separately for each plan.">加载图片后标定两点。按住 Alt 拖动平移底图。</p>
+  <div class="form">
+    <label class="full"><span data-en="Image (PNG, JPEG, WebP)">图片</span><input id="underlayFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
+    <label><span data-en="Opacity">不透明度</span><input id="underlayOpacity" type="range" min="0" max="1" step=".05"></label>
+    <label><span data-en="Show underlay">显示底图</span><input id="underlayShow" type="checkbox"></label>
+  </div>
+  <div class="actions"><button class="btn" id="underlayCalibrate" data-en="Calibrate two points">标定两点</button><button class="btn" id="underlayMove" data-en="Move image">移动底图</button><button class="btn" id="underlayClose" data-en="Done">完成</button></div>
+</dialog>
+<div id="underlayHint" hidden></div>
+
+
+<script>
+/* ======================= 多语言（中文 / English，默认中文） ======================= */
+const LANG_KEY = 'kvartira-3d:language';
+const LANGS = ['zh', 'zht', 'en', 'ru'];             // 简体 / 繁體（台湾用字）/ English
+let LANG = (() => { const fallback = navigator.language.toLowerCase().startsWith('ru') ? 'ru' : 'zh'; try { const l = localStorage.getItem(LANG_KEY); return LANGS.includes(l) ? l : fallback; } catch(e) { return fallback; } })();
+// 简 → 繁：先按词替换一字多义的字，再逐字查表（表由 OpenCC s2tw 按本页用到的字生成）
+const S2T_PHRASES = [['布置','佈置'],['布局','佈局'],['台面','檯面'],['复制','複製']];
+const S2T = new Map(('与與两兩个個为為书書于於仅僅从從价價会會传傳体體余餘侧側倾傾储儲儿兒关關内內写寫净淨准準击擊则則刚剛删刪制製办辦动動势勢区區单單占佔卧臥卫衛厅廳历歷压壓厨廚双雙发發变變叶葉后後吗嗎听聽启啟哑啞围圍图圖圆圓场場坐座块塊垫墊墙牆处處备備复復头頭妆妝婴嬰实實宽寬对對导導层層屉屜属屬岛島带帶干乾并並库庫应應开開当當径徑态態总總悬懸懒懶户戶护護拟擬择擇挂掛挡擋挤擠损損换換据據摆擺摇搖撑撐数數无無时時显顯暂暫机機杂雜杆桿条條来來松鬆构構柜櫃标標栈棧栏欄样樣梁樑棱稜椭橢横橫橱櫥气氣没沒注註浅淺测測浏瀏游遊滚滾满滿灯燈灵靈点點热熱状狀独獨环環现現电電画畫监監盖蓋盘盤砖磚确確离離积積称稱竖豎筑築签籤类類约約级級线線结結绕繞绘繪给給统統继繼绿綠缀綴编編缝縫缩縮网網联聯脚腳获獲虚虛装裝见見视視览覽触觸计計认認让讓议議记記设設识識译譯该該语語请請读讀调調负負败敗质質贴貼赶趕转轉轮輪软軟轴軸轻輕载載较較辅輔辑輯边邊过過这這进進远遠适適选選邻鄰里裡针針钢鋼钮鈕铰鉸铺鋪销銷锁鎖键鍵镜鏡长長门門闭閉闲閒间間阅閱阳陽阴陰阶階随隨隐隱静靜页頁顶頂项項顺順颜顏飘飄飞飛马馬鸟鳥齐齊龙龍').match(/../gu).map(p => [...p]));
+const s2t = s => S2T_PHRASES.reduce((a, [f, t]) => a.replaceAll(f, t), s).replace(/[\u3400-\u9fff]/g, c => S2T.get(c) || c);
+const RU = {"Floor Plan Designer":"Планировщик квартиры","Nothing to undo":"Нечего отменять","Entry":"Вход","Drag to rotate (Shift for free angle)":"Потяните для поворота (Shift — свободный угол)","Drag to resize":"Потяните для изменения размера","Room Areas":"Площади комнат","Click to view / change flooring":"Нажмите, чтобы выбрать покрытие","Net floor area":"Полезная площадь","* Bay windows are excluded; areas use net inner wall dimensions":"* Эркеры не учтены; площадь по внутренним граням стен","Flooring Estimate":"Смета напольных покрытий","incl. 5% waste":"включая 5% запаса","Flooring total":"Всего за покрытия","Plan Stats":"Статистика проекта","Furniture":"Мебель","Walls removed":"Демонтировано стен","Clear measures":"Удалить измерения","Clear layout":"Очистить расстановку","Rotate":"Повернуть","Duplicate":"Дублировать","Delete":"Удалить","Properties":"Свойства","Done":"Готово","Floor / Properties":"Пол / свойства","There is no furniture to clear":"Нет мебели для удаления","Layout cleared — Undo to restore":"Расстановка очищена — можно отменить","Hide library ( [ )":"Скрыть каталог ( [ )","Show library ( [ )":"Показать каталог ( [ )","Hide properties ( ] )":"Скрыть свойства ( ] )","Show properties ( ] )":"Показать свойства ( ] )","Room":"Комната","Name":"Название","Floor area":"Площадь пола","Perimeter":"Периметр","Width":"Ширина","Depth":"Глубина","Flooring":"Покрытие пола","Estimated cost":"Ориентировочная стоимость","Furniture in room":"Мебель в комнате","None":"Нет","← Back to overview":"← К обзору","Center":"Центр","Rotation":"Поворот","Color":"Цвет","Footprint":"Занимаемая площадь","Rotate 90°":"Повернуть на 90°","Bring to front":"На передний план","Send to back":"На задний план","← Back":"← Назад","Drag to move; drag the top dot to rotate; drag the bottom-right square to resize. With \"Wall snap\" on, items snap flush to nearby walls.":"Перетаскивайте мебель для перемещения; верхний кружок — поворот, нижний правый квадрат — размер. С привязкой к стенам мебель выравнивается у ближайшей стены.","Load-bearing walls (black) cannot be removed":"Несущие стены (чёрные) нельзя демонтировать","Exterior walls are part of the building envelope and should not be removed":"Наружные стены ограждают здание и не предназначены для демонтажа","Wall restored":"Стена восстановлена","Hold and drag a line, or tap two points · snaps to walls · tap \"Select\" to exit":"Проведите линию или укажите две точки · Привязка к стенам · «Выбрать» — выход","Click two points (or drag) to measure · snaps to walls · Shift locks horizontal/vertical · Esc cancels":"Укажите две точки или проведите линию · Привязка к стенам · Shift — по осям · Esc — отмена","Click a grey non-bearing wall to remove it, click again to restore · black bearing walls cannot be removed":"Нажмите серую перегородку для демонтажа, ещё раз — восстановить · Чёрные несущие стены защищены","Click to add, or drag onto the plan":"Нажмите для добавления или перетащите на план","Drop it on the floor":"Перетащите предмет на пол","floor-plan-design":"планировка-квартиры","Tap or drag from the library · 1 finger pans · pinch zooms · bottom bar rotates / duplicates / deletes":"Добавление из каталога · Один палец — сдвиг · Щипок — масштаб · Панель внизу — поворот, копия, удаление","1 finger orbits · 2 fingers zoom / pan · tap furniture or floor to edit · tap doors to open":"Один палец — вращение · Два — масштаб и сдвиг · Нажмите мебель для выбора или дверь для открытия","Drag furniture onto the plan · scroll to zoom · drag empty space to pan · T for 3D":"Перетащите мебель на план · Колесо — масштаб · Пустое место — сдвиг · T — 3D","3D stays in sync with the plan · panel edits apply instantly · T for 2D":"3D синхронизирован с планом · Изменения свойств видны сразу · T — 2D","3D engine is still loading or failed to load (three.js needs a network connection)":"3D ещё загружается или недоступен (для Three.js требуется подключение к сети)","Showing at 1:60 (same scale as the original plan)":"Масштаб 1:60 (как у исходного плана)","Fullscreen is not supported here — in Safari, use \"Add to Home Screen\" to open it fullscreen":"Полный экран недоступен — в Safari можно добавить страницу на экран «Домой»","Could not enter fullscreen":"Не удалось включить полный экран","Exit fullscreen":"Выйти из полного экрана","Fullscreen":"Полный экран","Plan imported":"Планировка импортирована","Invalid file format":"Неверный формат файла","Reset to the default design? (undoable)":"Восстановить исходную расстановку этой планировки? (Можно отменить)","Whole home":"Вся квартира","1 finger orbits · 2 fingers zoom / pan · select furniture to drag it · tap doors to open":"Один палец — вращение · Два — масштаб и сдвиг · Выберите мебель для перемещения · Нажмите дверь для открытия","Left-drag orbits · right-drag pans · scroll zooms · select furniture to drag it · click doors to open":"Левая кнопка — вращение · Правая — сдвиг · Колесо — масштаб · Мебель можно двигать · Нажмите дверь для открытия","Joystick moves · drag to look · tap doors to open":"Джойстик — движение · Потяните экран для обзора · Нажмите дверь для открытия","WASD moves · mouse looks · Shift runs · E opens doors · Esc pauses":"WASD — движение · Мышь — обзор · Shift — быстрее · E — дверь · Esc — пауза","Tap to start at the front door":"Нажмите, чтобы начать у входной двери","Joystick moves · drag on screen to look":"Джойстик — движение · Потяните экран для обзора","Tap doors to open · \"Exit walk\" returns to orbit":"Нажмите дверь для открытия · «Выйти из прогулки» — вид сверху","Click to start at the front door":"Нажмите, чтобы начать у входной двери","\u003ckbd>W\u003c/kbd> \u003ckbd>A\u003c/kbd> \u003ckbd>S\u003c/kbd> \u003ckbd>D\u003c/kbd> move · mouse looks · \u003ckbd>Shift\u003c/kbd> runs":"\u003ckbd>W\u003c/kbd> \u003ckbd>A\u003c/kbd> \u003ckbd>S\u003c/kbd> \u003ckbd>D\u003c/kbd> — движение · Мышь — обзор · \u003ckbd>Shift\u003c/kbd> — быстрее","\u003ckbd>E\u003c/kbd> opens the door ahead · \u003ckbd>Esc\u003c/kbd> pauses":"\u003ckbd>E\u003c/kbd> — дверь перед вами или ближайшая в пределах 2,2 м · \u003ckbd>Esc\u003c/kbd> — пауза","Browser storage is full. The underlay will last only until this page closes. Use a smaller image.":"Хранилище браузера заполнено. Подложка сохранится только до закрытия страницы. Используйте изображение поменьше.","Click two points on the image · Esc cancels":"Укажите две точки на изображении · Esc — отмена","Drag to move the image · Esc finishes":"Перетащите подложку · Esc — завершить","Use a PNG, JPEG or WebP image up to 3 MB.":"Используйте PNG, JPEG или WebP размером до 3 МБ.","Could not read image":"Не удалось прочитать изображение","Calibrate underlay":"Масштаб подложки","Enter the real distance between the two points.":"Введите настоящее расстояние между двумя точками.","Distance (mm)":"Расстояние (мм)","Cancel":"Отмена","Continue":"Продолжить","Cannot open file":"Не удалось открыть файл","Invalid plan":"Некорректная планировка","Open plan":"Открыть планировку","Current edits are saved in this browser. The file will replace the active plan and clear its undo history.":"Текущие изменения сохранятся в этом браузере. Файл заменит активную планировку и очистит её историю отмены.","Could not read file":"Не удалось прочитать файл","Reset to default":"Восстановить исходную расстановку","Invalid plan path":"Некорректный путь планировки","Could not load plan. Use a local HTTP server or the File menu.":"Не удалось загрузить планировку. Используйте локальный HTTP-сервер или меню «Файл».","◧ Library":"◧ Каталог","Properties ◨":"Свойства ◨","3BR 2LR 2BA · Interior Design":"Квартира · Дизайн интерьера","Switch 2D / 3D (T)":"Переключить 2D / 3D (T)","2D Plan":"2D План","3D Scene":"3D Вид","Select / Move (V)":"Выбрать / двигать (V)","Select":"Выбрать","Measure (M)":"Измерить (M)","Measure":"Измерить","Demolish non-bearing walls (X)":"Демонтаж перегородок (X)","Demolish":"Демонтаж","Zoom out":"Уменьшить","Zoom in":"Увеличить","Fit to window (F)":"Вписать в окно (F)","Fit":"Вписать","Show at 1:60 (same scale as the original plan)":"Масштаб 1:60 (как у исходного плана)","Show at 1:100":"Масштаб 1:100","Orbit":"Обзор","Walk":"Прогулка","Iso":"Изометрия","Top":"Сверху","Undo (Ctrl+Z)":"Отменить (Ctrl+Z)","Undo":"Отменить","Redo (Ctrl+Shift+Z)":"Повторить (Ctrl+Shift+Z)","Redo":"Повторить","Remove all furniture and appliances (undoable)":"Удалить всю мебель и технику (можно отменить)","Clear":"Очистить","Dims":"Размеры","Rooms":"Комнаты","Grid":"Сетка","Bearing walls":"Несущие стены","Snap furniture to walls while dragging":"Привязывать мебель к стенам при перемещении","Wall snap":"Привязка","Full walls":"Полные стены","Cut walls":"Срез стен","Labels":"Названия","Night":"Ночь","Sun":"Солнце","File ▾":"Файл ▾","Export image":"Сохранить изображение","Export plan JSON":"Сохранить планировку","Import plan":"Открыть планировку…","Rooms · click to fly there":"Комнаты · Нажмите для перехода","Walk mode":"Режим прогулки","Exit walk":"Выйти из прогулки","Scale":"Масштаб","\u003csection>\u003ch3>Touch Controls\u003c/h3>\u003cdiv class=\"kbd\">\n    \u003ckbd>1-finger drag\u003c/kbd>\u003cspan>Pan on empty space\u003c/span>\u003ckbd>2 fingers\u003c/kbd>\u003cspan>Pinch to zoom, drag to pan\u003c/span>\n    \u003ckbd>Library\u003c/kbd>\u003cspan>Tap to place at center, or hold and drag right to a spot\u003c/span>\n    \u003ckbd>Tap item\u003c/kbd>\u003cspan>Drag to move; top dot rotates, bottom-right square resizes\u003c/span>\n    \u003ckbd>Toolbar\u003c/kbd>\u003cspan>Bottom bar can rotate / duplicate / delete\u003c/span>\n    \u003ckbd>Measure\u003c/kbd>\u003cspan>Hold and drag a line, or tap two points\u003c/span>\n    \u003ckbd>3D walk\u003c/kbd>\u003cspan>Joystick moves, drag to look, tap doors to open\u003c/span>\n  \u003c/div>\u003c/section>":"\u003csection>\u003ch3>Сенсорное управление\u003c/h3>\u003cdiv class=\"kbd\">\u003ckbd>Один палец\u003c/kbd>\u003cspan>Потяните пустое место для сдвига\u003c/span>\u003ckbd>Два пальца\u003c/kbd>\u003cspan>Щипок — масштаб, движение — сдвиг\u003c/span>\u003ckbd>Каталог\u003c/kbd>\u003cspan>Нажмите для добавления в центр или перетащите вправо на план\u003c/span>\u003ckbd>Мебель\u003c/kbd>\u003cspan>Тяните для перемещения; кружок — поворот, квадрат — размер\u003c/span>\u003ckbd>Панель внизу\u003c/kbd>\u003cspan>Поворот / копия / удаление\u003c/span>\u003ckbd>Измерение\u003c/kbd>\u003cspan>Проведите линию или укажите две точки\u003c/span>\u003ckbd>Прогулка\u003c/kbd>\u003cspan>Джойстик — движение, экран — обзор, нажатие — дверь\u003c/span>\u003c/div>\u003c/section>","\u003csection>\u003ch3>Keyboard Shortcuts\u003c/h3>\u003cdiv class=\"kbd\">\n    \u003ckbd>Drag\u003c/kbd>\u003cspan>Drag furniture onto the plan\u003c/span>\u003ckbd>V\u003c/kbd>\u003cspan>Select / move\u003c/span>\u003ckbd>M\u003c/kbd>\u003cspan>Measure (Shift: horizontal/vertical)\u003c/span>\n    \u003ckbd>X\u003c/kbd>\u003cspan>Demolish non-bearing walls (black = bearing)\u003c/span>\u003ckbd>R\u003c/kbd>\u003cspan>Rotate 90° (Shift reverses)\u003c/span>\u003ckbd>Arrows\u003c/kbd>\u003cspan>Nudge 10mm (Shift 100mm)\u003c/span>\n    \u003ckbd>⌘/Ctrl D\u003c/kbd>\u003cspan>Duplicate\u003c/span>\u003ckbd>Delete\u003c/kbd>\u003cspan>Delete\u003c/span>\u003ckbd>⌘/Ctrl Z\u003c/kbd>\u003cspan>Undo\u003c/span>\u003ckbd>T\u003c/kbd>\u003cspan>Toggle 2D / 3D\u003c/span>\u003ckbd>F\u003c/kbd>\u003cspan>Fit to window\u003c/span>\u003ckbd>Esc\u003c/kbd>\u003cspan>Deselect\u003c/span>\n  \u003c/div>\u003c/section>":"\u003csection>\u003ch3>Клавиши (любая раскладка)\u003c/h3>\u003cdiv class=\"kbd\">\u003ckbd>Перетаскивание\u003c/kbd>\u003cspan>Мебель из каталога на план\u003c/span>\u003ckbd>V / M / X\u003c/kbd>\u003cspan>Выбор / измерение / демонтаж\u003c/span>\u003ckbd>Shift\u003c/kbd>\u003cspan>Измерение по горизонтали или вертикали\u003c/span>\u003ckbd>R\u003c/kbd>\u003cspan>Поворот 90° (Shift — обратно)\u003c/span>\u003ckbd>Стрелки\u003c/kbd>\u003cspan>Сдвиг 10 мм (Shift — 100 мм)\u003c/span>\u003ckbd>⌘/Ctrl D\u003c/kbd>\u003cspan>Дублировать\u003c/span>\u003ckbd>Delete\u003c/kbd>\u003cspan>Удалить\u003c/span>\u003ckbd>⌘/Ctrl Z\u003c/kbd>\u003cspan>Отменить (Shift — повторить)\u003c/span>\u003ckbd>T / F\u003c/kbd>\u003cspan>2D / 3D; вписать в окно\u003c/span>\u003ckbd>[ / ]\u003c/kbd>\u003cspan>Каталог / свойства\u003c/span>\u003ckbd>+ / −\u003c/kbd>\u003cspan>Масштаб\u003c/span>\u003ckbd>Shift F\u003c/kbd>\u003cspan>Полный экран\u003c/span>\u003ckbd>WASD / E\u003c/kbd>\u003cspan>Прогулка / дверь\u003c/span>\u003ckbd>Alt + drag\u003c/kbd>\u003cspan>Переместить подложку\u003c/span>\u003ckbd>Esc\u003c/kbd>\u003cspan>Снять выделение / отменить\u003c/span>\u003c/div>\u003c/section>","Tracing underlay":"Подложка для обводки","Load an image, then calibrate two points. Alt-drag moves it in 2D. The image is stored only in this browser, separately for each plan.":"Загрузите изображение и задайте масштаб по двум точкам. Alt + перетаскивание — сдвиг в 2D. Подложка сохраняется только в этом браузере, отдельно для каждой планировки.","Image (PNG, JPEG, WebP)":"Изображение (PNG, JPEG, WebP)","Opacity":"Прозрачность","Show underlay":"Показывать подложку","Calibrate two points":"Масштаб по двум точкам","Move image":"Переместить подложку","Underlay…":"Подложка…","Illustrative upstream prices in CNY; not a local quotation.":"Примерные цены исходного проекта в юанях; не коммерческая смета.","Master Bedroom":"Главная спальня","Master Bath":"Главная ванная","Kids' Room":"Детская","Guest Bath":"Гостевая ванная","Laundry Balcony":"Постирочная","Children's Room":"Комната детей","Kitchen":"Кухня","Dining":"Столовая","Hallway":"Прихожая","Living Room":"Гостиная","Leisure Balcony":"Балкон","Master Bay Window":"Эркер спальни","Children's Bay Window":"Эркер детской","Oak Flooring":"Дубовый паркет","Walnut Flooring":"Паркет из ореха","800 Tile":"Плитка 800 мм","600 Tile":"Плитка 600 мм","Marble":"Мрамор","300 Anti-slip Tile":"Нескользящая плитка 300 мм","Terrazzo":"Терраццо","Wall-to-wall Carpet":"Ковролин","Bedroom":"Спальня","Dining & Kitchen":"Кухня и столовая","Bathroom":"Ванная","Appliances":"Техника","Study & Leisure":"Работа и отдых","Double Bed 1.8m":"Двуспальная кровать 1,8 м","Double Bed 1.5m":"Двуспальная кровать 1,5 м","Double Bed":"Двуспальная кровать","Single Bed":"Односпальная кровать","Crib":"Детская кроватка","Nightstand":"Прикроватная тумба","Wardrobe":"Шкаф для одежды","Small Wardrobe":"Небольшой шкаф","Dresser":"Туалетный столик","Desk":"Письменный стол","Chair":"Стул","Bookshelf":"Книжный шкаф","Bay Cushion":"Подушка для эркера","3-Seat Sofa":"Трёхместный диван","Loveseat":"Двухместный диван","Corner Sofa":"Угловой диван","Armchair":"Кресло","Beanbag":"Кресло-мешок","Coffee Table":"Журнальный столик","Side Table":"Приставной столик","TV Stand":"Тумба для ТВ","Rug":"Ковёр","Shoe Cabinet":"Обувница","Entry Cabinet":"Тумба в прихожую","Floor Lamp":"Торшер","Plant":"Растение","Large Plant":"Большое растение","Dining Table":"Обеденный стол","6-Seat Dining Table":"Обеденный стол на шесть","Round Table":"Круглый стол","Dining Chair":"Обеденный стул","Kitchen Island":"Кухонный остров","Bar Stool":"Барный стул","Kitchen Counter":"Кухонная столешница","Gas Stove":"Варочная панель","Sink":"Мойка","Fridge":"Холодильник","Sideboard":"Буфет","Toilet":"Унитаз","Vanity":"Тумба с раковиной","Double Vanity":"Двойная раковина","Shower":"Душевая кабина","Shower Area":"Душевая зона","Bathtub":"Ванна","Washer":"Стиральная машина","Laundry Sink":"Хозяйственная раковина","Water Heater":"Водонагреватель","Storage Cabinet":"Шкаф для хранения","65\" TV":"Телевизор 65″","55\" TV":"Телевизор 55″","French-door Fridge":"Двухдверный холодильник","Floor AC":"Напольный кондиционер","Wall AC":"Настенный кондиционер","Dishwasher":"Посудомоечная машина","Oven Tower":"Пенал с духовкой","Dryer":"Сушильная машина","Air Purifier":"Очиститель воздуха","Long Desk":"Длинный письменный стол","Office Chair":"Офисное кресло","Large Bookshelf":"Большой книжный шкаф","Upright Piano":"Пианино","Treadmill":"Беговая дорожка","Reading Chair":"Кресло для чтения","Tea Table":"Чайный столик","Lounge Chair":"Кресло для отдыха","Storage & utility":"Хранение и инженерия","Long hanging rail":"Штанга для длинной одежды","Double hanging rail":"Две штанги для одежды","Open shelves":"Открытые полки","Drawer unit":"Комод с полками","Overhead cabinet":"Антресоль","Coat hooks":"Крючки для одежды","Boiler":"Бойлер","Washer + dryer":"Стиральная и сушильная машины","Tall cabinet":"Высокий шкаф","Electrical panel":"Электрощит","Decor":"Декор","Curtains":"Шторы","Wall art":"Картина","Mirror":"Зеркало","Glass blocks":"Стеклоблоки","Could not save locally. Export JSON to keep a backup.":"Не удалось сохранить в браузере. Экспортируйте JSON для резервной копии.","Floating cabinet":"Подвесная тумба","Dresser on legs":"Комод на ножках","Oak desk":"Дубовый письменный стол","Podium / block":"Подиум / блок","Shelved niche":"Ниша с полками","Heated towel rail":"Полотенцесушитель","Ceiling rain shower":"Потолочный душ","Approximate 2026 prices, ₽/m². Materials + 5% waste; labour, delivery and underlay excluded. Not a shop quotation.":"Цены на 2026 год — ориентировочно, ₽/м². Материалы + 5% запаса; без работ, доставки и подложки. Не предложение магазина."};
+const RU_PATTERNS = [["^Net\\ floor\\ area\\ ≈\\ (.*?)\\ m²\\ ·\\ Units:\\ mm\\ ·\\ Original\\ scale\\ 1:60$",["Полезная площадь ≈ ",1," м² · Размеры в мм · Исходный масштаб 1:60"]],["^Remove\\ all\\ (.*?)\\ furniture\\ /\\ appliance\\ items\\?\\\nWalls,\\ flooring\\ and\\ measurements\\ are\\ kept\\.\\ You\\ can\\ Undo\\ this\\.$",["Удалить все ",1," предметов мебели и техники?\nСтены, покрытия и измерения сохранятся. Действие можно отменить."]],["^Wall\\ area\\ \\(2\\.8m\\ ceiling,\\ openings\\ not\\ deducted\\)\\ ≈\\ (.*?)\\ m²$",["Площадь стен (потолок 2,8 м, без вычета проёмов) ≈ ",1," м²"]],["^(.*?)\\ items$",["",1," шт."]],["^Added\\ \"(.*?)\"\\ (.*?)×(.*?)$",["Добавлено: «",1,"» ",2,"×",3,""]],["^Marked\\ (.*?)\\ mm\\ of\\ wall\\ for\\ removal$",["Отмечен демонтаж ",1," мм стены"]],["^Remove\\ all\\ (.*?)\\ furniture\\ /\\ appliance\\ items\\?$",["Удалить все ",1," предметов мебели и техники?"]],["^Furniture\\ is\\ drawn\\ at\\ real\\ size\\ \\(mm\\)\\.\\ (.*?)\\ Edit\\ size\\ and\\ color\\ in\\ the\\ right\\ panel\\ afterwards\\.$",["Мебель показана в настоящих размерах (мм). Нажмите для добавления в центр или перетащите на план / пол в 3D. На сенсорном экране прокручивайте каталог вверх и вниз, а предмет тяните вправо. Размеры и цвет меняются в свойствах."]],["^Net\\ floor\\ area\\ ≈\\ (.*?)\\ m²\\ ·\\ Units:\\ mm$",["Полезная площадь ≈ ",1," м² · Размеры в мм"]],["^Wall\\ area\\ \\((.*?)m\\ ceiling,\\ openings\\ not\\ deducted\\)\\ ≈\\ (.*?)\\ m²$",["Площадь стен (потолок ",1," м, без вычета проёмов) ≈ ",2," м²"]]].map(([p,t]) => [new RegExp(p,"s"),t]);
+function ruText(s){
+  if (RU[s] !== undefined) return RU[s];
+  for (const [pattern,tokens] of RU_PATTERNS){ const m = pattern.exec(s); if (m) return tokens.map(t => typeof t === 'number' ? m[t] : t).join(''); }
+  return s;
+}
+const tr = (zh,en) => LANG === 'ru' ? ruText(en) : LANG === 'en' ? en : LANG === 'zht' ? s2t(zh) : zh;
+const DEMO_EN = {'Прихожая':'Hallway','Комната':'Room','Спальня':'Bedroom','Гостиная':'Living Room','Кухня':'Kitchen','Ванная':'Bathroom','Туалет':'Toilet','Кладовая':'Storage Room'};
+const EXTRA_ZH = {'Прихожая':'过道','Комната':'卧室','Спальня':'主卧室','Гостиная':'客厅','Кухня':'厨房','Ванная':'卫浴','Туалет':'卫生间','Кладовая':'储藏室','Storage & utility':'收纳与设备','Long hanging rail':'长衣挂杆','Double hanging rail':'双层挂杆','Open shelves':'开放搁架','Drawer unit':'抽屉柜','Overhead cabinet':'顶柜','Coat hooks':'衣钩','Boiler':'锅炉','Washer + dryer':'洗烘叠放','Tall cabinet':'高柜','Electrical panel':'配电箱','Decor':'装饰','Curtains':'窗帘','Wall art':'装饰画','Mirror':'镜子','Glass blocks':'玻璃砖'};
+
+Object.assign(EXTRA_ZH, {'Floating cabinet':'悬空柜','Dresser on legs':'细腿斗柜','Oak desk':'橡木书桌','Podium / block':'地台 / 块体','Shelved niche':'搁架壁龛','Heated towel rail':'毛巾加热架','Ceiling rain shower':'顶喷花洒'});
+
+// 内置的房间 / 材料 / 家具名称存的是中文；英文界面下显示译名，用户自己改过的名称原样显示
+const NAMES_EN = {
+  '主卧室':'Master Bedroom', '主卫浴':'Master Bath', '小孩房':"Kids' Room", '客卫浴':'Guest Bath', '洗衣阳台':'Laundry Balcony',
+  '子女房':"Children's Room", '厨房':'Kitchen', '餐厅':'Dining', '过道':'Hallway', '客厅':'Living Room', '休闲阳台':'Leisure Balcony',
+  '主卧飘窗':'Master Bay Window', '子女房飘窗':"Children's Bay Window",
+  '橡木地板':'Oak Flooring', '胡桃木地板':'Walnut Flooring', '800 地砖':'800 Tile', '600 地砖':'600 Tile', '大理石':'Marble',
+  '300 防滑砖':'300 Anti-slip Tile', '水磨石':'Terrazzo', '满铺地毯':'Wall-to-wall Carpet',
+  '卧室':'Bedroom', '餐厨':'Dining & Kitchen', '卫浴':'Bathroom', '家电':'Appliances', '书房 · 休闲':'Study & Leisure',
+  '双人床 1.8m':'Double Bed 1.8m', '双人床 1.5m':'Double Bed 1.5m', '双人床':'Double Bed', '单人床':'Single Bed', '婴儿床':'Crib',
+  '床头柜':'Nightstand', '衣柜':'Wardrobe', '小衣柜':'Small Wardrobe', '梳妆台':'Dresser', '书桌':'Desk', '椅子':'Chair',
+  '书架':'Bookshelf', '飘窗垫':'Bay Cushion', '三人沙发':'3-Seat Sofa', '双人沙发':'Loveseat', '转角沙发':'Corner Sofa',
+  '单人沙发':'Armchair', '懒人沙发':'Beanbag', '茶几':'Coffee Table', '边几':'Side Table', '电视柜':'TV Stand', '地毯':'Rug',
+  '鞋柜':'Shoe Cabinet', '玄关柜':'Entry Cabinet', '落地灯':'Floor Lamp', '绿植':'Plant', '大绿植':'Large Plant',
+  '餐桌':'Dining Table', '六人餐桌':'6-Seat Dining Table', '圆桌':'Round Table', '餐椅':'Dining Chair', '岛台':'Kitchen Island',
+  '吧椅':'Bar Stool', '橱柜台面':'Kitchen Counter', '燃气灶':'Gas Stove', '水槽':'Sink', '冰箱':'Fridge', '餐边柜':'Sideboard',
+  '马桶':'Toilet', '浴室柜':'Vanity', '双盆浴室柜':'Double Vanity', '淋浴房':'Shower', '淋浴区':'Shower Area', '浴缸':'Bathtub',
+  '洗衣机':'Washer', '洗衣池':'Laundry Sink', '电热水器':'Water Heater', '储物柜':'Storage Cabinet', '65 寸电视':'65" TV',
+  '55 寸电视':'55" TV', '对开门冰箱':'French-door Fridge', '柜机空调':'Floor AC', '挂机空调':'Wall AC', '洗碗机':'Dishwasher',
+  '蒸烤箱高柜':'Oven Tower', '烘干机':'Dryer', '空气净化器':'Air Purifier', '长书桌':'Long Desk', '办公椅':'Office Chair',
+  '大书架':'Large Bookshelf', '立式钢琴':'Upright Piano', '跑步机':'Treadmill', '阅读椅':'Reading Chair', '茶桌':'Tea Table', '休闲椅':'Lounge Chair',
+};
+const NAMES_ZH = Object.fromEntries(Object.entries(NAMES_EN).map(([zh,en]) => [en,zh]));
+const nm = s => { const en = NAMES_EN[s] ?? DEMO_EN[s] ?? s, zh = EXTRA_ZH[s] ?? NAMES_ZH[s] ?? s; return LANG === 'ru' ? (DEMO_EN[s] ? s : ruText(en)) : LANG === 'en' ? en : LANG === 'zht' ? s2t(zh) : zh; };
+// 静态文案：元素上写 data-en / data-en-title，中文原文首次切换时存进 dataset
+function applyStaticLang(){
+  document.documentElement.lang = {zh:'zh-CN', zht:'zh-TW', en:'en',ru:'ru'}[LANG];
+  document.title = tr('户型装修设计', 'Floor Plan Designer');
+  document.querySelectorAll('[data-en]').forEach(el => { el.dataset.zh ??= el.textContent; el.textContent = tr(el.dataset.zh, el.dataset.en); });
+  document.querySelectorAll('[data-en-title]').forEach(el => { el.dataset.zhTitle ??= el.title; el.title = tr(el.dataset.zhTitle, el.dataset.enTitle); });
+  document.querySelectorAll('#langSel [data-lang]').forEach(b => { const on = b.dataset.lang === LANG; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+}
+
+// The embedded plan and imported plans use the same validated contract.
+const DEFAULT_PLAN = {"id":"khrushchev-gi-3k","name":"ГИ · Трёхкомнатная квартира","ceiling":2.5,"door_head":2.1,"license":"CC-BY-SA-3.0","source":{"title":"GI Planirovka 3K","author":"Melee","url":"https://commons.wikimedia.org/wiki/File:GI_Planirovka_3K.jpg","license":"CC-BY-SA-3.0"},"trace_notes":["Interpretive orthogonal trace of a skewed photograph, not a measured survey. Stairwell excluded. Exterior walls 350 mm; partitions 100 mm.","Printed lengths take priority. Room 2 is 2570 × 2270 mm = 5.8339 m² although the photo states 5.9 m². Bedroom depth inferred as 2945 mm from 8.6 m² / 2.92 m.","Living room has a 3630 mm main bay and a narrower lower bay beside the 2500 mm kitchen. Hall has an inferred stepped passage around the WC and closet. Its principal 1620 mm clear zone is shown by a dimension chain; partition positions and door swings are estimates.","Kitchen depth 2080 mm and bath depth 1173 mm are inferred from printed areas. Door openings and window widths are approximate. The shallow hall recess beside the bath is not a route to the kitchen; kitchen access is from the living room.","Renovation furniture and lighting are illustrative, not from the source image."],"walls":[[-350,-350,450,0,"e"],[2050,-350,3180,0,"e"],[5080,-350,5940,0,"e"],[-350,7766,450,8116,"e"],[2000,7766,3300,8116,"e"],[5100,7766,5940,8116,"e"],[-350,0,0,3500,"e"],[-350,4300,0,7766,"e"],[5590,0,5940,7766,"e"],[2570,0,2670,2945,"n"],[0,2270,100,2370,"n"],[800,2270,2570,2370,"n"],[770,2370,870,2395,"n"],[1670,2370,1770,2995,"n"],[770,2995,1830,3095,"n"],[2470,2995,2670,3095,"n"],[2670,2945,2800,3045,"n"],[3600,2945,5590,3045,"n"],[1860,3375,1960,5686,"n"],[2570,3095,2670,3475,"n"],[0,4313,650,4413,"n"],[1350,4313,1720,4413,"n"],[1620,4413,1720,5586,"n"],[0,5586,1860,5686,"n"],[2500,5686,2600,5900,"n"],[2500,6700,2600,7766,"n"]],"windows":[[450,-350,2050,0,0.85,2.2],[3180,-350,5080,0,0.85,2.2],[450,7766,2000,8116,0.95,2.2],[3300,7766,5100,8116,0.85,2.2]],"doors":[{"name":"Вход","rect":[-350,3500,0,4300],"h":[0,4300],"c":[0,-1],"o":[1,0],"len":800,"entry":true},{"name":"Комната","rect":[100,2270,800,2370],"h":[100,2270],"c":[1,0],"o":[0,-1],"len":700},{"name":"Спальня","rect":[2800,2945,3600,3045],"h":[2800,2945],"c":[1,0],"o":[0,-1],"len":800},{"name":"Туалет","rect":[770,2395,870,2995],"h":[870,2395],"c":[0,1],"o":[1,0],"len":600},{"name":"Ванная","rect":[650,4313,1350,4413],"h":[1350,4313],"c":[-1,0],"o":[0,-1],"len":700},{"name":"Кухня","rect":[2500,5900,2600,6700],"h":[2600,5900],"c":[0,1],"o":[1,0],"len":800}],"slides":[{"rect":[1830,2995,2470,3095],"v":false},{"rect":[1960,3375,2570,3475],"v":false}],"rooms":[{"id":"room","name":"Комната","poly":[[0,0],[2570,0],[2570,2270],[0,2270]],"mat":"wood","at":[1250,1850],"source_area":5.9},{"id":"bedroom","name":"Спальня","poly":[[2670,0],[5590,0],[5590,2945],[2670,2945]],"mat":"wood","at":[4200,2550],"source_area":8.6},{"id":"wc","name":"Туалет","poly":[[870,2370],[1670,2370],[1670,2995],[870,2995]],"mat":"terrazzo","at":[1270,2790],"source_area":0.5},{"id":"closet","name":"Кладовая","poly":[[1770,2370],[2570,2370],[2570,2995],[1770,2995]],"mat":"wood","at":[2170,2810],"source_area":0.5},{"id":"hall","name":"Прихожая","poly":[[0,2370],[770,2370],[770,3095],[2570,3095],[2570,3375],[1860,3375],[1860,5586],[1720,5586],[1720,4313],[0,4313]],"mat":"terrazzo","at":[900,3820],"source_area":3.2},{"id":"bath","name":"Ванная","poly":[[0,4413],[1620,4413],[1620,5586],[0,5586]],"mat":"antislip","at":[850,5350],"source_area":1.9},{"id":"kitchen","name":"Кухня","poly":[[0,5686],[2500,5686],[2500,7766],[0,7766]],"mat":"terrazzo","at":[1500,7000],"source_area":5.2},{"id":"living","name":"Гостиная","poly":[[2670,3045],[5590,3045],[5590,7766],[2600,7766],[2600,5686],[1960,5686],[1960,3475],[2670,3475]],"mat":"wood","at":[3800,5800],"source_area":15.5}],"dims":[{"horiz":true,"at":-950,"start":0,"segs":[2570,100,2920]},{"horiz":false,"at":6400,"start":-350,"segs":[8466]},{"horiz":true,"at":8700,"start":0,"segs":[2500,100,2990]},{"horiz":true,"at":3630,"start":0,"segs":[1620]},{"horiz":true,"at":3950,"start":1960,"segs":[3630]}],"lights":[{"k":"spot","at":[400,2770]},{"k":"spot","at":[850,3540]},{"k":"spot","at":[1300,4050]},{"k":"spot","at":[400,4800]},{"k":"spot","at":[1250,5200]},{"k":"spot","at":[1250,6400]},{"k":"spot","at":[2170,2750]},{"k":"pl","at":[900,3650]},{"k":"pl","at":[900,5050]},{"k":"pl","at":[1250,6500]},{"k":"pl","at":[1270,2700]},{"k":"pendant","at":[1300,1350],"h":2.12},{"k":"pendant","at":[4100,2000],"h":2.15},{"k":"pendant","at":[3910,6960],"h":1.9,"style":"glass"},{"k":"track","a":[3750,3800],"b":[3750,5900]},{"k":"sconce","at":[2700,500],"dir":[1,0],"h":1.6,"style":"spot"},{"k":"led","pts":[[100,5750],[100,7300]]},{"k":"pendant","at":[1750,6710],"h":1.9,"style":"glass"},{"k":"sconce","at":[5560,500],"dir":[-1,0],"h":1.6,"style":"spot"}],"furniture":[{"type":"rug","name":"Rug","cx":3870,"cy":1660,"w":1750,"d":1900,"rot":0,"color":"#d7cab3"},{"type":"rug","name":"Rug","cx":3890,"cy":5070,"w":2050,"d":1800,"rot":90,"color":"#d1c3ac"},{"type":"bed","name":"Single Bed","cx":1050,"cy":680,"w":900,"d":1900,"rot":270,"color":"#b9c5b3"},{"type":"odesk","name":"Oak desk","cx":2300,"cy":1520,"w":900,"d":500,"rot":90,"color":"#d1af86"},{"type":"chair","name":"Chair","cx":1810,"cy":1520,"w":420,"d":430,"rot":270,"color":"#a8957c"},{"type":"tallcab","name":"Tall cabinet","cx":2300,"cy":410,"w":500,"d":550,"rot":0,"color":"#e6ddce","ht":2.35,"rows":2,"hd":"edge"},{"type":"bed","name":"Double Bed","cx":3780,"cy":1180,"w":1400,"d":2000,"rot":0,"color":"#c1c9bc"},{"type":"nightstand","name":"Nightstand","cx":2880,"cy":400,"w":350,"d":350,"rot":0,"color":"#e6ddce"},{"type":"wardrobe","name":"Wardrobe","cx":5280,"cy":1620,"w":1500,"d":600,"rot":90,"color":"#e6ddce"},{"type":"toilet","name":"Toilet","cx":1270,"cy":2700,"w":350,"d":590,"rot":90,"color":"#f5f4ef"},{"type":"oshelf","name":"Open shelves","cx":2170,"cy":2600,"w":760,"d":430,"rot":0,"color":"#d7bf9b","led":"both"},{"type":"topbox","name":"Overhead cabinet","cx":2170,"cy":2600,"w":760,"d":430,"rot":0,"color":"#e6ddce"},{"type":"shoecab","name":"Shoe Cabinet","cx":240,"cy":3330,"w":700,"d":320,"rot":270,"color":"#e6ddce"},{"type":"hooks","name":"Coat hooks","cx":90,"cy":3330,"w":650,"d":100,"rot":270,"color":"#e6ddce"},{"type":"mirror","name":"Mirror","cx":1600,"cy":3860,"w":600,"d":40,"rot":90,"color":"#e6ddce","ht":1.2,"y0":1.15},{"type":"shower","name":"Shower","cx":430,"cy":5150,"w":800,"d":800,"rot":0,"color":"#d7e6e5"},{"type":"vanity","name":"Vanity","cx":1370,"cy":4960,"w":500,"d":400,"rot":90,"color":"#a9b8a2","mirror":false},{"type":"boiler","name":"Boiler","cx":230,"cy":4640,"w":360,"d":250,"rot":270,"color":"#f2f0e9"},{"type":"counter","name":"Kitchen Counter","cx":310,"cy":6540,"w":1650,"d":600,"rot":270,"color":"#d5ddd1"},{"type":"ksink","name":"Sink","cx":310,"cy":6070,"w":550,"d":450,"rot":270,"color":"#e2e7e5"},{"type":"stove","name":"Gas Stove","cx":310,"cy":6960,"w":450,"d":430,"rot":270,"color":"#343a37"},{"type":"fridge","name":"Fridge","cx":2100,"cy":7330,"w":600,"d":650,"rot":180,"color":"#dfdfd6"},{"type":"washdry","name":"Washer + dryer","cx":940,"cy":5990,"w":600,"d":590,"rot":0,"color":"#e8e6de","lift":0.08},{"type":"art","name":"Wall art","cx":1370,"cy":5740,"w":550,"d":40,"rot":0,"color":"#bb835d","ht":0.55,"y0":1.4},{"type":"sofa","name":"3-Seat Sofa","cx":5100,"cy":5050,"w":2100,"d":880,"rot":90,"color":"#a9b8a2"},{"type":"floatcab","name":"Floating cabinet","cx":2160,"cy":5000,"w":1450,"d":360,"rot":270,"color":"#caa77d","ht":0.32,"y0":0.3,"rows":1,"hd":"none","top":"#e6ddce"},{"type":"tv","name":"55\" TV","cx":2110,"cy":5000,"w":1230,"d":60,"rot":270,"color":"#242627"},{"type":"coffeetable","name":"Coffee Table","cx":3950,"cy":5050,"w":1000,"d":500,"rot":90,"color":"#d1af86"},{"type":"plant","name":"Plant","cx":5240,"cy":3750,"w":450,"d":450,"rot":0,"color":"#91aa81"},{"type":"floorlamp","name":"Floor Lamp","cx":5220,"cy":6420,"w":370,"d":370,"rot":0,"color":"#373a32"},{"type":"roundtable","name":"Round Table","cx":3910,"cy":6960,"w":900,"d":900,"rot":0,"color":"#cfa879"},{"type":"chair","name":"Dining Chair","cx":3240,"cy":6960,"w":440,"d":460,"rot":270,"color":"#b7c0aa"},{"type":"chair","name":"Dining Chair","cx":4560,"cy":6960,"w":440,"d":460,"rot":90,"color":"#b7c0aa"},{"type":"art","name":"Wall art","cx":5540,"cy":5050,"w":1000,"d":40,"rot":90,"color":"#c58b69","ht":0.7,"y0":1.25,"c2":"#778a75"},{"type":"art","name":"Wall art","cx":4100,"cy":3090,"w":800,"d":40,"rot":0,"color":"#d5be95","ht":0.6,"y0":1.3,"c2":"#5f796f"},{"type":"art","name":"Wall art","cx":2520,"cy":1300,"w":650,"d":40,"rot":90,"color":"#b79576","ht":0.65,"y0":1.4},{"type":"curtain","name":"Curtains","cx":1250,"cy":110,"w":1850,"d":180,"rot":0,"color":"#b9b3a1","sheer":true,"open":0.14},{"type":"curtain","name":"Curtains","cx":4130,"cy":110,"w":2200,"d":180,"rot":0,"color":"#b9b3a1","sheer":true,"open":0.14},{"type":"curtain","name":"Curtains","cx":1225,"cy":7656,"w":1800,"d":180,"rot":180,"color":"#b9b3a1","sheer":true,"open":0.14},{"type":"curtain","name":"Curtains","cx":4200,"cy":7656,"w":2100,"d":180,"rot":180,"color":"#b9b3a1","sheer":true,"open":0.14},{"type":"cabinet","name":"Storage Cabinet","cx":1740,"cy":3850,"w":900,"d":240,"rot":90,"color":"#e6ddce"},{"type":"drawers","name":"Dresser on legs","cx":4580,"cy":2750,"w":1100,"d":350,"rot":180,"color":"#e6ddce","ht":0.78,"legs":0.14,"humid":true},{"type":"mirror","name":"Mirror","cx":1575,"cy":4960,"w":430,"d":40,"rot":90,"color":"#e6ddce","shape":"oval","ht":0.85,"y0":1.15},{"type":"towelrail","name":"Heated towel rail","cx":1200,"cy":5500,"w":450,"d":100,"rot":180,"color":"#f2f0e9","ht":1.15,"y0":0.4},{"type":"gbox","name":"Podium / block","cx":940,"cy":5990,"w":620,"d":600,"rot":0,"color":"#e6ddce","ht":0.08,"y0":0},{"type":"table","name":"Dining Table","cx":1750,"cy":6710,"w":700,"d":500,"rot":0,"color":"#d1af86"},{"type":"chair","name":"Dining Chair","cx":1750,"cy":6260,"w":400,"d":420,"rot":180,"color":"#b7c0aa"}]};
+const MATERIAL_IDS = ['wood','walnut','tile800','tile600','marble','antislip','terrazzo','carpet'];
+const FURNITURE_TYPES = ["acwall","aircon","armchair","art","barstool","bathtub","baycushion","beanbag","bed","boiler","bookshelf","cabinet","chair","chest","coffeetable","cornersofa","counter","crib","curtain","desk","dishwasher","drawers","dresser","dryer","epanel","floatcab","floorlamp","fridge","gbox","glassblock","hang1","hang2","hooks","island","ksink","mirror","niche","nightstand","odesk","officechair","oshelf","ovencol","piano","plant","purifier","rainshower","roundtable","rug","shoecab","shower","sidetable","sofa","stove","table","tallcab","toilet","topbox","towelrail","treadmill","tv","tvstand","vanity","wardrobe","washdry","washer","waterheater"];
+const cloneData = value => JSON.parse(JSON.stringify(value));
+function validatePlan(input){
+  const p = cloneData(input), fail = path => { throw new Error(path); };
+  const num = (n, lo=-100000, hi=100000) => typeof n === 'number' && Number.isFinite(n) && n >= lo && n <= hi;
+  const str = s => typeof s === 'string' && s.length > 0 && s.length <= 200;
+  const point = a => Array.isArray(a) && a.length === 2 && a.every(v => num(v));
+  const rect = a => Array.isArray(a) && a.length >= 4 && a.slice(0,4).every(v => num(v)) && a[2] > a[0] && a[3] > a[1];
+  const list = (key, max, required=false) => { if (!required && p[key] === undefined) p[key] = []; if (!Array.isArray(p[key]) || p[key].length > max) fail(key); };
+  if (!p || typeof p !== 'object' || !str(p.name)) fail('name');
+  if (!num(p.ceiling, 2.2, 6)) fail('ceiling (2.2–6 m)');
+  if (p.id !== undefined && (typeof p.id !== 'string' || !/^[a-zA-Z0-9_-]{1,80}$/.test(p.id))) fail('id');
+  if (p.door_head === undefined) p.door_head = 2.1;
+  if (!num(p.door_head, 1.8, p.ceiling)) fail('door_head');
+  list('walls',2000,true); list('windows',300); list('doors',300); list('slides',300); list('rooms',200,true); list('lights',300); list('furniture',1000);
+  if (!p.walls.length || !p.rooms.length) fail('walls / rooms');
+  p.walls.forEach((w,i) => { if (!rect(w) || w.length !== 5 || !['b','e','n','low'].includes(w[4])) fail('walls['+i+']'); });
+  p.windows.forEach((w,i) => { if (!rect(w) || w.length !== 6 || !num(w[4],0,p.ceiling) || !num(w[5],w[4]+.05,p.ceiling)) fail('windows['+i+']'); });
+  p.doors.forEach((d,i) => {
+    if (!d || !str(d.name) || !rect(d.rect) || !point(d.h) || !point(d.c) || !point(d.o) || !num(d.len,300,3000)) fail('doors['+i+']');
+    const axis = v => v.every(n => [-1,0,1].includes(n)) && Math.abs(v[0])+Math.abs(v[1]) === 1;
+    if (!axis(d.c) || !axis(d.o) || d.c[0]*d.o[0]+d.c[1]*d.o[1] !== 0 || (d.door_head !== undefined && !num(d.door_head,1.8,p.ceiling))) fail('doors['+i+'].direction / door_head');
+  });
+  p.slides.forEach((d,i) => { if (!d || !rect(d.rect) || typeof d.v !== 'boolean' || (d.door_head !== undefined && !num(d.door_head,1.8,p.ceiling))) fail('slides['+i+']'); });
+  const ids = new Set();
+  p.rooms.forEach((r,i) => {
+    if (!r || typeof r.id !== 'string' || !/^[a-zA-Z0-9_-]{1,80}$/.test(r.id) || ['__proto__','constructor','prototype'].includes(r.id) || ids.has(r.id) || !str(r.name) || !MATERIAL_IDS.includes(r.mat) || !Array.isArray(r.poly) || r.poly.length < 3 || r.poly.length > 200 || !r.poly.every(point) || (r.at !== undefined && !point(r.at))) fail('rooms['+i+']');
+    ids.add(r.id);
+    const signed = r.poly.reduce((a,v,j) => { const q = r.poly[(j+1)%r.poly.length]; return a+v[0]*q[1]-q[0]*v[1]; },0);
+    if (Math.abs(signed) < 10000) fail('rooms['+i+'].poly');
+  });
+  p.lights.forEach((l,i) => {
+    if (!l || !['spot','pl','track','pendant','sconce','led'].includes(l.k)) fail('lights['+i+']');
+    if (['spot','pl','pendant','sconce'].includes(l.k) && !point(l.at)) fail('lights['+i+'].at');
+    if (['pendant','sconce'].includes(l.k) && !num(l.h,.2,p.ceiling-.2)) fail('lights['+i+'].h');
+    if (l.style !== undefined && !(l.k === 'pendant' ? ['glass','bar'] : l.k === 'sconce' ? ['spot'] : []).includes(l.style)) fail('lights['+i+'].style');
+    if (l.len !== undefined && (l.k !== 'pendant' || l.style !== 'bar' || !num(l.len,50,15000))) fail('lights['+i+'].len');
+    if (l.vert !== undefined && (l.k !== 'pendant' || l.style !== 'bar' || typeof l.vert !== 'boolean')) fail('lights['+i+'].vert');
+    const segment = (a,b) => point(a) && point(b) && (a[0] === b[0] || a[1] === b[1]) && Math.hypot(b[0]-a[0],b[1]-a[1]) >= 20;
+    if (l.k === 'track' && !segment(l.a,l.b)) fail('lights['+i+'].a / b');
+    if (l.k === 'sconce' && (!point(l.dir) || Math.abs(Math.hypot(...l.dir)-1) > .001)) fail('lights['+i+'].dir');
+    if (l.k === 'led' && (!Array.isArray(l.pts) || l.pts.length < 2 || l.pts.length > 100 || !l.pts.every(point) || l.pts.slice(1).some((v,j) => !segment(l.pts[j],v)))) fail('lights['+i+'].pts');
+  });
+  const fids = new Set(), color = s => typeof s === 'string' && /^#[0-9a-f]{6}$/i.test(s);
+  p.furniture.forEach((f,i) => {
+    if (!f || !FURNITURE_TYPES.includes(f.type) || !str(f.name) || !num(f.cx) || !num(f.cy) || !num(f.w,50,15000) || !num(f.d,20,15000)) fail('furniture['+i+']');
+    f.rot ??= 0; if (!num(f.rot,-36000,36000)) fail('furniture['+i+'].rot');
+    f.id ??= 'item-'+i;
+    if (typeof f.id !== 'string' || !/^[a-zA-Z0-9_-]{1,80}$/.test(f.id) || fids.has(f.id)) fail('furniture['+i+'].id'); fids.add(f.id);
+    for (const key of ['color','frame','c2','top','back']) if (f[key] !== undefined && !color(f[key])) fail('furniture['+i+'].'+key);
+    if (f.led !== undefined && !['both','plus','minus'].includes(f.led)) fail('furniture['+i+'].led');
+    if (f.sheer !== undefined && typeof f.sheer !== 'boolean') fail('furniture['+i+'].sheer');
+    if (f.open !== undefined && !num(f.open,0,.5)) fail('furniture['+i+'].open');
+    if (f.ht !== undefined && !num(f.ht,f.type === 'gbox' ? .01 : .1,f.type === 'tallcab' ? 6 : p.ceiling)) fail('furniture['+i+'].ht');
+    for (const key of ['y0','lift','legs','ny0']) if (f[key] !== undefined && !num(f[key],0,p.ceiling)) fail('furniture['+i+'].'+key);
+    if (f.nh !== undefined && !num(f.nh,.1,p.ceiling)) fail('furniture['+i+'].nh');
+    if (f.nw !== undefined && !num(f.nw,50,f.w)) fail('furniture['+i+'].nw');
+    if (f.rows !== undefined && (!Number.isInteger(f.rows) || !num(f.rows,1,20))) fail('furniture['+i+'].rows');
+    if (f.hd !== undefined && !['bar','edge','none'].includes(f.hd)) fail('furniture['+i+'].hd');
+    if (f.shape !== undefined && !['oval','rect'].includes(f.shape)) fail('furniture['+i+'].shape');
+    if (f.humid !== undefined && typeof f.humid !== 'boolean') fail('furniture['+i+'].humid');
+    if (f.mirror !== undefined && typeof f.mirror !== 'boolean') fail('furniture['+i+'].mirror');
+    if (f.type === 'drawers' && (f.legs ?? .15) >= (f.ht ?? .8)-.02) fail('furniture['+i+'].legs / ht');
+    // Respect the supplied niche module's defaults (zero ny0 also means 1 m).
+    if (f.type === 'niche' && ((f.nw ?? 500) >= f.w || f.d <= 30 || (f.nh ?? 1.1)+(f.ny0 || 1) >= p.ceiling)) fail('furniture['+i+'].niche dimensions');
+  });
+  if (p.dims !== undefined){
+    list('dims',100);
+    p.dims.forEach((d,i) => { if (!d || typeof d.horiz !== 'boolean' || !num(d.at) || !num(d.start) || !Array.isArray(d.segs) || !d.segs.length || d.segs.length > 100 || !d.segs.every(v => num(v,1,200000))) fail('dims['+i+']'); });
+  }
+  if (!p.id){
+    // Stable for the same source, independent of property order and furniture edits.
+    const identity = JSON.stringify([p.name,p.ceiling,p.walls,p.rooms.map(r => [r.id,r.poly])]);
+    let hash = 2166136261; for (const c of identity) hash = Math.imul(hash ^ c.charCodeAt(0),16777619);
+    p.id = 'plan-'+(hash>>>0).toString(16);
+  }
+  return p;
+}
+function planExtents(p){
+  const xs = p.walls.flatMap(w => [w[0],w[2]]), ys = p.walls.flatMap(w => [w[1],w[3]]);
+  return {x0:Math.min(...xs), y0:Math.min(...ys), x1:Math.max(...xs), y1:Math.max(...ys)};
+}
+let PLAN = validatePlan(DEFAULT_PLAN);
+let WALLS, WINS, DOORS, SLIDES, ROOMS, LIGHTS, BOUNDS, OX, OY, H, STORE;
+function bindPlan(p){
+  PLAN = p; WALLS = p.walls; WINS = p.windows; DOORS = p.doors; SLIDES = p.slides; ROOMS = p.rooms; LIGHTS = p.lights;
+  const b = planExtents(p); OX = (b.x0+b.x1)/2; OY = (b.y0+b.y1)/2; H = p.ceiling;
+  BOUNDS = {x:b.x0-1400,y:b.y0-1400,w:b.x1-b.x0+2800,h:b.y1-b.y0+2800};
+  STORE = 'kvartira-3d:v1:'+p.id;
+}
+bindPlan(PLAN);
+function planDims(){
+  const b = planExtents(PLAN);
+  return PLAN.dims ?? [{horiz:true,at:b.y0-700,start:b.x0,segs:[b.x1-b.x0]}, {horiz:false,at:b.x1+700,start:b.y0,segs:[b.y1-b.y0]}];
+}
+function entryGeometry(){
+  const d = DOORS.find(d => d.entry); if (!d) return null;
+  return {x:(d.rect[0]+d.rect[2])/2,y:(d.rect[1]+d.rect[3])/2,dx:d.o[0],dy:d.o[1]};
+}
+
+const MATS = {
+  wood:    {name:'橡木地板', price:320, sw:'#d8b88a'},
+  walnut:  {name:'胡桃木地板', price:380, sw:'#9b7250'},
+  tile800: {name:'800 地砖', price:220, sw:'#ebe6dc'},
+  tile600: {name:'600 地砖', price:160, sw:'#dfe3e1'},
+  marble:  {name:'大理石', price:650, sw:'#f1eee8'},
+  antislip:{name:'300 防滑砖', price:140, sw:'#d3d8d4'},
+  terrazzo:{name:'水磨石', price:280, sw:'#e6dfd3'},
+  carpet:  {name:'满铺地毯', price:200, sw:'#c9c3d3'},
+};
+// 家具库：[类型, 名称, 宽, 深, 颜色]
+const LIB = [
+  {cat:'卧室', items:[
+    ['bed','双人床 1.8m',1800,2000,'#c9d6df'],['bed','双人床 1.5m',1500,2000,'#d8c7dc'],['bed','单人床',1200,2000,'#e8d5b5'],
+    ['crib','婴儿床',1250,700,'#efe3d0'],['nightstand','床头柜',450,400,'#e8dccb'],['wardrobe','衣柜',2000,600,'#efe6d8'],
+    ['wardrobe','小衣柜',1200,550,'#efe6d8'],['dresser','梳妆台',1000,450,'#efe6d8'],['desk','书桌',1200,600,'#e2cfb4'],
+    ['chair','椅子',450,480,'#cfc6b8'],['bookshelf','书架',800,300,'#e2cfb4'],['baycushion','飘窗垫',520,1800,'#e7dccd']]},
+  {cat:'客厅', items:[
+    ['sofa','三人沙发',2400,900,'#b7c4b0'],['sofa','双人沙发',1700,880,'#c3cbd6'],['cornersofa','转角沙发',2800,1700,'#b7c4b0'],
+    ['armchair','单人沙发',850,850,'#d6b99a'],['beanbag','懒人沙发',800,800,'#e0b98f'],['coffeetable','茶几',1300,650,'#e8dccb'],
+    ['sidetable','边几',500,500,'#d9c3a3'],['tvstand','电视柜',2400,400,'#e2cfb4'],['rug','地毯',2400,1700,'#d9cbb8'],
+    ['shoecab','鞋柜',1000,350,'#efe6d8'],['shoecab','玄关柜',1400,380,'#e6dccc'],['floorlamp','落地灯',450,450,'#3d3a34'],
+    ['plant','绿植',500,500,'#a9c39b'],['plant','大绿植',700,700,'#9dbb8c']]},
+  {cat:'餐厨', items:[
+    ['table','餐桌',1400,800,'#e2cfb4'],['table','六人餐桌',1800,900,'#d8c2a2'],['roundtable','圆桌',1000,1000,'#e2cfb4'],
+    ['chair','餐椅',450,480,'#cfc6b8'],['island','岛台',1800,900,'#e9e5de'],['barstool','吧椅',420,420,'#6b5d4c'],
+    ['counter','橱柜台面',1600,600,'#e9e5de'],['stove','燃气灶',750,450,'#dcdcdc'],['ksink','水槽',800,450,'#e1e6ea'],
+    ['fridge','冰箱',700,700,'#dfe4e8'],['cabinet','餐边柜',1600,400,'#efe6d8']]},
+  {cat:'卫浴', items:[
+    ['toilet','马桶',400,700,'#ffffff'],['vanity','浴室柜',800,500,'#eef1f3'],['vanity','双盆浴室柜',1200,500,'#eef1f3'],
+    ['shower','淋浴房',900,900,'#e4edf2'],['bathtub','浴缸',1600,750,'#eef3f6'],['washer','洗衣机',600,600,'#e6ebee'],
+    ['waterheater','电热水器',800,450,'#f4f4f2'],['cabinet','储物柜',1000,400,'#efe6d8']]},
+  {cat:'家电', items:[
+    ['tv','65 寸电视',1450,80,'#1d1d1f'],['tv','55 寸电视',1230,80,'#1d1d1f'],['fridge','对开门冰箱',910,700,'#c9ced3'],
+    ['aircon','柜机空调',500,380,'#f6f7f8'],['acwall','挂机空调',900,250,'#f6f7f8'],['dishwasher','洗碗机',600,600,'#c9ced3'],
+    ['ovencol','蒸烤箱高柜',600,600,'#efe6d8'],['dryer','烘干机',600,600,'#e6ebee'],['purifier','空气净化器',400,300,'#f4f4f2']]},
+  {cat:'书房 · 休闲', items:[
+    ['desk','长书桌',1600,700,'#d8c2a2'],['officechair','办公椅',620,620,'#4a4f55'],['bookshelf','大书架',1600,350,'#e2cfb4'],
+    ['piano','立式钢琴',1500,600,'#1f1d1b'],['treadmill','跑步机',800,1800,'#3a3a3c'],['armchair','阅读椅',750,800,'#c9a98a']]},
+];
+LIB.push({cat:'Storage & utility',items:[
+  ['hang1','Long hanging rail',800,550,'#e2cfb4'],['hang2','Double hanging rail',800,550,'#e2cfb4'],
+  ['oshelf','Open shelves',600,500,'#e2cfb4'],['chest','Drawer unit',800,550,'#efe6d8'],
+  ['topbox','Overhead cabinet',800,550,'#efe6d8'],['hooks','Coat hooks',600,100,'#d8c3a5'],
+  ['boiler','Boiler',450,320,'#f4f4f2'],['washdry','Washer + dryer',600,600,'#e6ebee'],
+  ['tallcab','Tall cabinet',600,600,'#efe6d8'],['epanel','Electrical panel',400,100,'#f2f3f1'],
+  ['floatcab','Floating cabinet',1600,380,'#d1af86'],['drawers','Dresser on legs',1000,450,'#e6ddce'],
+  ['odesk','Oak desk',1200,600,'#d1af86'],['gbox','Podium / block',1000,500,'#e6ddce'],
+  ['niche','Shelved niche',800,220,'#e6ddce'],['towelrail','Heated towel rail',450,100,'#f2f0e9'],
+  ['rainshower','Ceiling rain shower',300,300,'#b8babc']
+]},{cat:'Decor',items:[
+  ['curtain','Curtains',1600,200,'#b9b4a3'],['art','Wall art',700,40,'#bd8866'],
+  ['mirror','Mirror',600,40,'#dfeaee'],['glassblock','Glass blocks',800,190,'#dbeaf0']
+]});
+
+const typeColor = t => { for (const c of LIB) for (const i of c.items) if (i[0]===t) return i[4]; return '#eee'; };
+
+let _n = 1;
+const uid = () => 'f' + Date.now().toString(36) + (_n++);
+const F = (type,name,cx,cy,w,d,rot=0,color) => ({id:uid(),type,name,cx,cy,w,d,rot,color:color||typeColor(type)});
+
+function defaultFurniture(){ return PLAN.furniture.map(f => ({...f,color:f.color || typeColor(f.type)})); }
+
+function defaultState(){
+  const rooms = {}; ROOMS.forEach(r => rooms[r.id] = {name:r.name, mat:r.mat});
+  return {furniture:defaultFurniture(), rooms, demolished:validDemolished(PLAN.editor?.demolished), measures:validMeasures(PLAN.editor?.measures)};
+}
+
+function validDemolished(ids){ return Array.isArray(ids) ? ids.filter(id => /^w\d+$/.test(id) && ['n','low'].includes(WALLS[+id.slice(1)]?.[4])) : []; }
+function validMeasures(ms){
+  const point = p => p && Number.isFinite(p.x) && Number.isFinite(p.y) && Math.abs(p.x) <= 100000 && Math.abs(p.y) <= 100000;
+  return Array.isArray(ms) ? ms.slice(0,1000).filter(m => m && point(m.a) && point(m.b)) : [];
+}
+function load(){
+  try { const s = JSON.parse(localStorage.getItem(STORE)); if (s && Array.isArray(s.furniture)) return fixState(s); } catch(e) {}
+  return null;
+}
+function fixState(s){
+  const rooms = {};
+  ROOMS.forEach(r => { const saved = s.rooms?.[r.id]; rooms[r.id] = {name:typeof saved?.name === 'string' && saved.name.length <= 200 ? saved.name : r.name, mat:MATERIAL_IDS.includes(saved?.mat) ? saved.mat : r.mat}; });
+  const furniture = validatePlan({...PLAN,furniture:s.furniture}).furniture.map(f => ({...f,color:f.color || typeColor(f.type)}));
+  return {furniture,rooms,demolished:validDemolished(s.demolished),measures:validMeasures(s.measures)};
+}
+
+const PX_MM = 25.4 / 96;                       // 1 CSS px = 0.2646 mm
+const COARSE = matchMedia('(pointer:coarse)').matches;   // iPad / 手机等触屏为主的设备
+const TAP = COARSE ? 9 : 4;                    // 手指按下后移动超过该像素才算拖动
+const narrow = () => matchMedia('(max-width:1100px)').matches;
+// BOUNDS is derived by bindPlan().
+const $ = s => document.querySelector(s);
+const svg = $('#plan');
+
+
+/* ======================= 状态 / 历史 / 存储 ======================= */
+let state = load() || defaultState();
+const ui = {tool:'select', sel:null, mA:null, mCur:null,
+  layers:{dims:true, labels:true, furn:true, grid:false, bearing:false, wallSnap:true}};
+let view = {x0:0, y0:0, s:.06};
+const undoStack = [], redoStack = [];
+
+function save(){ try { localStorage.setItem(STORE, JSON.stringify(state)); } catch(e) { toast(tr('无法本地保存，请导出 JSON 备份。','Could not save locally. Export JSON to keep a backup.')); } }
+const snap = () => JSON.stringify(state);
+function commit(before){ undoStack.push(before); if (undoStack.length > 150) undoStack.shift(); redoStack.length = 0; save(); }
+function mutate(fn){ const b = snap(); fn(); commit(b); renderAll(); }
+function undo(){ if (!undoStack.length) return toast(tr('没有可撤销的操作', 'Nothing to undo')); redoStack.push(snap()); state = JSON.parse(undoStack.pop()); validateSel(); save(); renderAll(); }
+function redo(){ if (!redoStack.length) return; undoStack.push(snap()); state = JSON.parse(redoStack.pop()); validateSel(); save(); renderAll(); }
+function validateSel(){ if (ui.sel?.kind==='furn' && !getF(ui.sel.id)) ui.sel = null; }
+const getF = id => state.furniture.find(f => f.id === id);
+
+/* ======================= 几何工具 ======================= */
+const area = poly => Math.abs(poly.reduce((a,p,i) => { const q = poly[(i+1)%poly.length]; return a + p[0]*q[1] - q[0]*p[1]; }, 0)) / 2 / 1e6;
+const perim = poly => poly.reduce((a,p,i) => { const q = poly[(i+1)%poly.length]; return a + Math.hypot(q[0]-p[0], q[1]-p[1]); }, 0) / 1000;
+const bbox = poly => { const xs = poly.map(p=>p[0]), ys = poly.map(p=>p[1]); return [Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)]; };
+function aabb(f){ const a = f.rot*Math.PI/180, c = Math.abs(Math.cos(a)), s = Math.abs(Math.sin(a)); return {hw:f.w/2*c + f.d/2*s, hh:f.w/2*s + f.d/2*c}; }
+const fmt = (n, d=2) => n.toFixed(d);
+const norm = a => ((Math.round(a) % 360) + 360) % 360;
+function snapRects(){ return WALLS.filter((w,i) => !state.demolished.includes('w'+i)).concat(WINS); }
+
+/* ======================= 颜色 / 材质图案 ======================= */
+function hex2rgb(h){ h = h.replace('#',''); if (h.length===3) h = h.split('').map(c=>c+c).join(''); const n = parseInt(h,16); return [(n>>16)&255,(n>>8)&255,n&255]; }
+function shade(h,k){ const f = v => Math.max(0,Math.min(255,Math.round(k>1 ? v+(255-v)*(k-1)*2 : v*k))); return '#'+hex2rgb(h).map(v=>f(v).toString(16).padStart(2,'0')).join(''); }
+
+function buildDefs(){
+  const plank = (id,base,line) => `<pattern id="m-${id}" patternUnits="userSpaceOnUse" width="1800" height="360">
+      <rect width="1800" height="360" fill="${base}"/>
+      <path d="M0 0H1800M0 180H1800M1200 0V180M600 180V360" stroke="${line}" stroke-width="10"/>
+      <path d="M100 70Q500 60 900 85T1700 75M200 260Q700 250 1100 275T1750 262" stroke="${line}" stroke-width="5" fill="none" opacity=".45"/></pattern>`;
+  const tile = (id,size,base,line) => `<pattern id="m-${id}" patternUnits="userSpaceOnUse" width="${size}" height="${size}">
+      <rect width="${size}" height="${size}" fill="${base}"/><path d="M0 0H${size}M0 0V${size}" stroke="${line}" stroke-width="10"/></pattern>`;
+  $('#defs').innerHTML =
+    plank('wood','#dcc09a','#bf9d70') + plank('walnut','#a57c56','#80593a') +
+    tile('tile800',800,'#ece7de','#d3cabb') + tile('tile600',600,'#e2e6e3','#c4cbc6') + tile('antislip',300,'#d6dbd7','#b3bab4') +
+    `<pattern id="m-marble" patternUnits="userSpaceOnUse" width="1200" height="1200">
+      <rect width="1200" height="1200" fill="#f3f0ea"/><path d="M0 0H1200M0 0V1200" stroke="#dcd5c8" stroke-width="10"/>
+      <path d="M-50 300C250 260 380 520 700 470S1100 640 1260 600M200 1200C300 950 520 980 640 820" stroke="#d6cfc2" stroke-width="12" fill="none"/></pattern>
+    <pattern id="m-terrazzo" patternUnits="userSpaceOnUse" width="500" height="500">
+      <rect width="500" height="500" fill="#e8e1d5"/>
+      <circle cx="60" cy="80" r="22" fill="#b9a58c"/><circle cx="310" cy="140" r="16" fill="#8fa3a0"/><circle cx="190" cy="330" r="26" fill="#c9b7a2"/>
+      <circle cx="420" cy="400" r="18" fill="#a88f76"/><circle cx="90" cy="440" r="12" fill="#8fa3a0"/><circle cx="440" cy="40" r="10" fill="#b9a58c"/></pattern>
+    <pattern id="m-carpet" patternUnits="userSpaceOnUse" width="120" height="120">
+      <rect width="120" height="120" fill="#c9c3d3"/><circle cx="30" cy="30" r="8" fill="#bab3c6"/><circle cx="90" cy="90" r="8" fill="#bab3c6"/></pattern>
+    <pattern id="grid" patternUnits="userSpaceOnUse" width="1000" height="1000">
+      <path d="M500 0V1000M0 500H1000" stroke="#e5dfd3" stroke-width="8"/><path d="M0 0V1000M0 0H1000" stroke="#d8d0c1" stroke-width="14"/></pattern>`;
+}
+
+/* ======================= 家具图例 ======================= */
+const ST = 'stroke="#3d3a34" stroke-width="1" vector-effect="non-scaling-stroke"';
+const rc = (x,y,w,h,f,ex='') => `<rect x="${x}" y="${y}" width="${Math.max(0,w)}" height="${Math.max(0,h)}" fill="${f}" ${ST} ${ex}/>`;
+const ec = (cx,cy,rx,ry,f,ex='') => `<ellipse cx="${cx}" cy="${cy}" rx="${Math.max(0,rx)}" ry="${Math.max(0,ry)}" fill="${f}" ${ST} ${ex}/>`;
+const ln = (x1,y1,x2,y2,ex='') => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" ${ST} ${ex}/>`;
+const pa = (d,f='none',ex='') => `<path d="${d}" fill="${f}" ${ST} ${ex}/>`;
+const DASH = 'stroke-dasharray="4 3"';
+
+function furnSVG(t,w,d,c){
+  const x = -w/2, y = -d/2, m = Math.min(w,d);
+  switch (t){
+    case 'bed': {
+      let s = rc(x,y,w,d,'#fbf8f2','rx="30"') + rc(x,y,w,Math.min(90,d*.05),shade(c,.62),'rx="20"');
+      const ph = Math.min(360,d*.18), py = y+150;
+      if (w >= 1300){ const pw = (w-240)/2; s += rc(x+80,py,pw,ph,'#fff','rx="70"') + rc(x+160+pw,py,pw,ph,'#fff','rx="70"'); }
+      else s += rc(x+80,py,w-160,ph,'#fff','rx="70"');
+      const by = py+ph+110, bh = y+d-15-by;
+      s += rc(x+15,by,w-30,bh,c,'rx="40"') + pa(`M${x+15} ${by+300}H${x+w-15}`,'none',DASH);
+      s += pa(`M${x+w-15-Math.min(420,w*.3)} ${by}L${x+w-15} ${by}L${x+w-15} ${by+Math.min(420,w*.3)}Z`, shade(c,1.12));
+      return s;
+    }
+    case 'sofa': case 'armchair': {
+      const b = d*.24, a = Math.min(200,w*.13), n = t==='armchair' ? 1 : (w>2200 ? 3 : 2), cw = (w-2*a)/n, dk = shade(c,.85);
+      let s = rc(x,y,w,d,dk,'rx="60"');
+      for (let i=0;i<n;i++) s += rc(x+a+i*cw,y+b,cw,d-b-40,c,'rx="40"');
+      return s + rc(x,y,w,b,dk,'rx="50"') + rc(x,y,a,d,dk,'rx="50"') + rc(x+w-a,y,a,d,dk,'rx="50"');
+    }
+    case 'cornersofa': {
+      const k = Math.min(950,d*.56,w*.4), b = 220, dk = shade(c,.85);
+      let s = pa(`M${x} ${y}H${x+w}V${y+k}H${x+k}V${y+d}H${x}Z`, dk);
+      const cw = (w-b-200)/2;
+      s += rc(x+b,y+b,cw,k-b-30,c,'rx="40"') + rc(x+b+cw,y+b,cw,k-b-30,c,'rx="40"') + rc(x+b,y+k,k-b-30,d-k-200,c,'rx="40"');
+      return s + rc(x,y,w,b,dk,'rx="50"') + rc(x,y,b,d,dk,'rx="50"') + rc(x+w-200,y,200,k,dk,'rx="50"') + rc(x,y+d-200,k,200,dk,'rx="50"');
+    }
+    case 'nightstand': return rc(x,y,w,d,c,'rx="30"') + `<circle r="${m*.24}" fill="#fff6dd" ${ST}/>` + `<circle r="${m*.08}" fill="${shade(c,.8)}" ${ST}/>`;
+    case 'wardrobe': {
+      let s = rc(x,y,w,d,c) + ln(x+50,0,x+w-50,0);
+      for (let hx = x+160; hx < x+w-100; hx += 180) s += ln(hx-45,-d*.28,hx+45,d*.28,'opacity=".6"');
+      return s;
+    }
+    case 'cabinet': case 'shoecab': return rc(x,y,w,d,c) + ln(x,y+d,x+w,y);
+    case 'dresser': return rc(x,y,w,d,c,'rx="20"') + rc(x+w*.2,y,w*.6,55,'#dfe9ee') + ec(0,d/2+180,160,140,shade(c,.9));
+    case 'desk': return rc(x,y,w,d,c,'rx="20"') + rc(-w*.18,y+50,w*.36,45,'#555') + rc(-w*.14,y+d*.45,w*.28,d*.28,'#f4f4f4','rx="10"');
+    case 'chair': return rc(x+25,y+d*.16,w-50,d*.84-10,c,'rx="60"') + rc(x,y,w,d*.2,shade(c,.78),'rx="40"');
+    case 'bookshelf': { let s = rc(x,y,w,d,c); for (let bx = x+400; bx < x+w-50; bx += 400) s += ln(bx,y,bx,y+d); return s; }
+    case 'baycushion': return rc(x,y,w,d,c,'rx="60"') + rc(x+60,y+80,w-120,Math.min(300,d*.2),'#fff','rx="60"') + rc(x+60,y+d-80-Math.min(300,d*.2),w-120,Math.min(300,d*.2),'#fff','rx="60"');
+    case 'coffeetable': return rc(x,y,w,d,c,'rx="80"') + rc(x+60,y+60,w-120,d-120,shade(c,1.06),'rx="50"');
+    case 'tvstand': return rc(x,y,w,d,c) + rc(x+w*.15,y+30,w*.7,55,'#3a3a3a');
+    case 'rug': return rc(x,y,w,d,c,'rx="40" fill-opacity=".6"') + rc(x+90,y+90,w-180,d-180,'none','rx="30" stroke-dasharray="3 3" opacity=".6"');
+    case 'plant': {
+      let s = `<circle r="${m/2}" fill="${c}" fill-opacity=".85" ${ST}/>`;
+      for (let k=0;k<8;k++) s += `<ellipse cx="0" cy="${-m*.27}" rx="${m*.1}" ry="${m*.21}" transform="rotate(${k*45})" fill="${shade(c,.8)}" ${ST}/>`;
+      return s + `<circle r="${m*.1}" fill="#8a6a4a" ${ST}/>`;
+    }
+    case 'table': return rc(x,y,w,d,c,'rx="30"') + rc(x+50,y+50,w-100,d-100,'none','rx="20" opacity=".4"');
+    case 'roundtable': return ec(0,0,w/2,d/2,c) + ec(0,0,w/2-50,d/2-50,'none','opacity=".4"');
+    case 'counter': return rc(x,y,w,d,c) + ln(x,y+d-40,x+w,y+d-40,DASH);
+    case 'stove': {
+      let s = rc(x,y,w,d,'#2f2f2f','rx="20"'); const r = m*.26;
+      const pts = w/d > 1.4 ? [[-w/4,0],[w/4,0]] : [[-w/4,-d/4],[w/4,-d/4],[-w/4,d/4],[w/4,d/4]];
+      pts.forEach(([px,py]) => s += `<circle cx="${px}" cy="${py}" r="${r}" fill="none" stroke="#bbb" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="${px}" cy="${py}" r="${r*.45}" fill="#666"/>`);
+      return s;
+    }
+    case 'ksink': return rc(x,y,w,d,c,'rx="20"') + rc(x+w*.06,y+d*.18,w*.42,d*.66,'#fff','rx="50"') + rc(x+w*.52,y+d*.18,w*.42,d*.66,'#fff','rx="50"') + `<circle cx="0" cy="${y+d*.09}" r="22" fill="#999"/>`;
+    case 'fridge': return rc(x,y,w,d,c,'rx="30"') + ln(x,y+d*.14,x+w,y+d*.14) + ln(0,y+d*.14,0,y+d) + rc(-70,y+d*.5,40,d*.25,'#aab') + rc(30,y+d*.5,40,d*.25,'#aab');
+    case 'toilet': return rc(x+w*.04,y,w*.92,d*.27,c,'rx="30"') + ec(0,y+d*.27+d*.36,w*.47,d*.36,c) + ec(0,y+d*.27+d*.4,w*.3,d*.24,'#eef4f7');
+    case 'vanity': return rc(x,y,w,d,c,'rx="20"') + ec(0,y+d*.57,Math.min(w*.32,260),d*.28,'#fff') + `<circle cx="0" cy="${y+d*.17}" r="26" fill="#999"/>`;
+    case 'shower': return rc(x,y,w,d,c) + ln(x,y,x+w,y+d,DASH) + ln(x+w,y,x,y+d,DASH) + `<circle r="45" fill="#fff" ${ST}/>`;
+    case 'bathtub': return rc(x,y,w,d,c,'rx="40"') + rc(x+80,y+80,w-160,d-160,'#fff',`rx="${m*.33}"`) + `<circle cx="${x+w-260}" cy="0" r="35" fill="#ccc" ${ST}/>`;
+    case 'washer': case 'dryer': return rc(x,y,w,d,c,'rx="30"') + rc(x,y,w,d*.14,shade(c,.9)) + `<circle cy="${d*.06}" r="${m*.34}" fill="#fff" ${ST}/><circle cy="${d*.06}" r="${m*.24}" fill="${t==='dryer'?'#e9dccb':'#cfdde4'}" ${ST}/>`;
+    case 'crib': {
+      let s = rc(x,y,w,d,c,'rx="20"') + rc(x+45,y+45,w-90,d-90,'#fff','rx="20"');
+      for (let sx = x+90; sx < x+w-60; sx += 90) s += ln(sx,y,sx,y+45,'opacity=".5"') + ln(sx,y+d-45,sx,y+d,'opacity=".5"');
+      return s;
+    }
+    case 'beanbag': return ec(0,0,w/2,d/2,c) + ec(-w*.04,-d*.06,w*.3,d*.28,shade(c,1.12),'opacity=".9"');
+    case 'sidetable': return ec(0,0,w/2,d/2,c) + ec(0,0,w*.12,d*.12,'none','opacity=".5"');
+    case 'floorlamp': return `<circle r="${m*.5}" fill="#fff6dd" fill-opacity=".85" ${ST}/>` + `<circle r="${m*.32}" fill="none" ${ST} ${DASH}/>` + `<circle r="${m*.07}" fill="${c}" ${ST}/>`;
+    case 'island': return rc(x,y,w,d,c) + ln(x,y+d-250,x+w,y+d-250,DASH);
+    case 'barstool': return `<circle r="${m/2}" fill="${c}" ${ST}/><circle r="${m*.3}" fill="${shade(c,1.15)}" ${ST}/>`;
+    case 'waterheater': return rc(x,y,w,d,c,`rx="${d/2}" ${DASH}`) + ln(x+w*.2,0,x+w*.8,0,DASH);
+    case 'tv': return rc(x,y,w,d,c,'rx="10"') + rc(x+w*.3,y+d,w*.4,Math.min(40,d),'#666');
+    case 'aircon': return rc(x,y,w,d,c,'rx="30"') + ln(x+40,y+d*.72,x+w-40,y+d*.72) + ln(x+40,y+d*.86,x+w-40,y+d*.86);
+    case 'acwall': {
+      let s = rc(x,y,w,d,c,`rx="30" ${DASH}`);
+      [.25,.5,.75].forEach(k => s += ln(x+w*k,y+d,x+w*k,y+d+200,`${DASH} opacity=".6"`));
+      return s;
+    }
+    case 'dishwasher': return rc(x,y,w,d,c,'rx="15"') + ln(x,y+d-70,x+w,y+d-70) + rc(x+w*.3,y+d-45,w*.4,25,'#888');
+    case 'ovencol': return rc(x,y,w,d,c) + ln(x,y,x+w,y+d) + ln(x+w,y,x,y+d);
+    case 'purifier': return rc(x,y,w,d,c,'rx="60"') + rc(x+45,y+45,w-90,d-90,'none',`rx="40" ${DASH}`);
+    case 'officechair': {
+      let s = '';
+      for (let k = 0; k < 5; k++) s += `<line x1="0" y1="0" x2="0" y2="${m*.48}" transform="rotate(${k*72+36})" stroke="#555" stroke-width="2" vector-effect="non-scaling-stroke"/>`;
+      return s + rc(x+w*.12,y+d*.22,w*.76,d*.66,c,'rx="80"') + rc(x+w*.15,y+d*.04,w*.7,d*.16,shade(c,.78),'rx="40"')
+        + rc(x+w*.02,y+d*.3,w*.1,d*.45,shade(c,.7),'rx="30"') + rc(x+w*.88,y+d*.3,w*.1,d*.45,shade(c,.7),'rx="30"');
+    }
+    case 'piano': {
+      let s = rc(x,y,w,d*.55,c,'rx="10"') + rc(x+40,y+d*.55,w-80,d*.4,shade(c,1.4),'rx="10"');
+      const kx = x+90, kw = w-180, kd = d*.2;
+      s += rc(kx,y+d*.55,kw,kd,'#faf8f3');
+      for (let i = 1; i < 26; i++) s += ln(kx+kw*i/26,y+d*.55,kx+kw*i/26,y+d*.55+kd,'opacity=".5"');
+      return s;
+    }
+    case 'treadmill': return rc(x,y,w,d,c,'rx="50"') + rc(x+90,y+320,w-180,d-400,'#1c1c1e','rx="25"') + rc(x,y,w,230,shade(c,1.4),'rx="40"');
+    // Extra furniture types: walk-in wardrobe parts, utility, decor.
+    case 'hang1': case 'hang2': {
+      let s = rc(x,y,w,d,c,'fill-opacity=".6"') + `<line x1="${x}" y1="0" x2="${x+w}" y2="0" stroke="#3d3a34" stroke-width="2.5" vector-effect="non-scaling-stroke"/>`;
+      for (let k = x + 50; k < x + w - 30; k += t === 'hang2' ? 60 : 90) s += ln(k, -d*.38, k, d*.38, 'opacity=".35"');
+      return s;
+    }
+    case 'oshelf': return rc(x,y,w,d,c) + ln(x+18,y,x+18,y+d) + ln(x+w-18,y,x+w-18,y+d) + ln(x,y+d*.5,x+w,y+d*.5,DASH);
+    case 'chest': return rc(x,y,w,d,c) + ln(x,y+d-50,x+w,y+d-50) + ln(x,y+d*.3,x+w,y+d*.3,DASH);
+    case 'topbox': return rc(x,y,w,d,'none','stroke-dasharray="12 8" opacity=".55"');
+    case 'hooks': return rc(x,y,w,d,c) + [.125,.375,.625,.875].map(k => `<circle cx="${x+w*k}" cy="${y+d}" r="22" fill="#3d3a34"/>`).join('');
+    case 'boiler': return rc(x,y,w,d,c,'rx="20"') + rc(x+w*.2,y+d*.6,w*.6,d*.2,'#5b5f63') + pa(`M${x+w*.25} ${y+d*.35}L${x+w*.4} ${y+d*.2}L${x+w*.55} ${y+d*.35}L${x+w*.7} ${y+d*.2}`);
+    case 'tallcab': return rc(x,y,w,d,c) + ln(x,y,x+w,y+d) + ln(x+w,y,x,y+d);
+    case 'epanel': return rc(x,y,w,d,'#dfe6ee');
+    case 'curtain': { let p = `M${x} 0`; for (let k = x; k < x + w; k += 120) p += `Q${k + 60} ${k % 240 ? -d*.4 : d*.4} ${Math.min(k + 120, x + w)} 0`; return rc(x,y,w,d,'none','opacity=".35"') + pa(p, 'none', 'opacity=".8"'); }
+    case 'art': case 'mirror': return rc(x,y,w,d,t === 'mirror' ? '#dfeaee' : c);
+    case 'glassblock': { let s = rc(x,y,w,d,'#dbeaf0'); for (let k = x + 190; k < x + w - 20; k += 190) s += ln(k,y,k,y+d,'opacity=".5"'); return s; }
+    case 'floatcab': return rc(x,y,w,d,c) + ln(x,y+d-40,x+w,y+d-40,DASH);
+    case 'drawers': return rc(x,y,w,d,c) + ln(0,y,0,y+d) + ln(x,y+d-50,x+w,y+d-50);
+    case 'odesk': return rc(x,y,w,d,c,'rx="15"') + rc(x+w-Math.min(600,w*.38),y,Math.min(600,w*.38),d,shade(c,.9));
+    case 'gbox': return rc(x,y,w,d,c,'opacity=".75"');
+    case 'niche': return rc(x,y,w,d,c) + rc(-250,y+d-150,500,150,'#7d7a52');
+    case 'towelrail': return rc(x,y,w,d,c);
+    case 'rainshower': return ec(0,0,w/2,d/2,'#dfe3e6');
+    case 'washdry': return furnSVG('washer',w,d,c);
+    default: return rc(x,y,w,d,c);
+  }
+}
+
+/* ======================= 渲染 ======================= */
+const NOLABEL = ['plant','floorlamp','sidetable','barstool','beanbag'];
+function renderRooms(){
+  let s = '';
+  ROOMS.forEach(r => s += `<polygon class="room" data-room="${r.id}" points="${r.poly.map(p=>p.join(',')).join(' ')}" fill="url(#m-${state.rooms[r.id].mat})"/>`);
+  const sill = ([a,b,c,d]) => `<rect x="${a}" y="${b}" width="${c-a}" height="${d-b}" fill="#e2dacb" stroke="#b9b0a0" stroke-width="1" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
+  DOORS.forEach(d => s += sill(d.rect)); SLIDES.forEach(d => s += sill(d.rect));
+  $('#gRooms').innerHTML = s;
+}
+
+function renderFurn(){
+  const g = $('#gFurn');
+  g.setAttribute('display', ui.layers.furn ? 'inline' : 'none');
+  g.innerHTML = state.furniture.map(f => {
+    const fs = Math.max(80, Math.min(170, Math.min(f.w,f.d)*.2));
+    const label = Math.min(f.w,f.d) >= 380 && !NOLABEL.includes(f.type)
+      ? `<text transform="rotate(${-f.rot})" font-size="${fs}" text-anchor="middle" dominant-baseline="central" fill="#4a443c" opacity=".8" pointer-events="none">${esc(nm(f.name))}</text>` : '';
+    return `<g class="furn" data-fid="${f.id}" transform="translate(${f.cx} ${f.cy}) rotate(${f.rot})">${furnSVG(f.type,f.w,f.d,f.color)}${label}</g>`;
+  }).join('');
+}
+
+function renderWalls(){
+  $('#gWalls').innerHTML = WALLS.map((w,i) => {
+    const [x0,y0,x1,y1,k] = w, id = 'w'+i, dem = state.demolished.includes(id);
+    let fill = k==='b' ? (ui.layers.bearing ? '#b8412c' : '#26241f') : k==='low' ? '#e9e3d8' : k==='e' ? '#8f897d' : '#a7a195';
+    let ex = k==='low' ? 'stroke="#8f897d" stroke-width="1" vector-effect="non-scaling-stroke"' : '';
+    if (dem){ fill = 'rgba(198,91,58,.12)'; ex = 'stroke="#c65b3a" stroke-width="1.2" stroke-dasharray="5 3" vector-effect="non-scaling-stroke"'; }
+    return `<rect class="wall" data-wall="${id}" x="${x0}" y="${y0}" width="${x1-x0}" height="${y1-y0}" fill="${fill}" ${ex}/>`;
+  }).join('');
+}
+
+function renderOpenings(){
+  const WS = 'stroke="#4f7394" stroke-width="1" vector-effect="non-scaling-stroke"';
+  let s = '';
+  WINS.forEach(([x0,y0,x1,y1]) => {
+    const w = x1-x0, h = y1-y0;
+    s += `<rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="#f7fbfd" ${WS}/>`;
+    if (w >= h) [1/3,2/3].forEach(t => s += `<line x1="${x0}" y1="${y0+h*t}" x2="${x1}" y2="${y0+h*t}" ${WS}/>`);
+    else [1/3,2/3].forEach(t => s += `<line x1="${x0+w*t}" y1="${y0}" x2="${x0+w*t}" y2="${y1}" ${WS}/>`);
+  });
+  const DS = 'stroke="#3d3a34" stroke-width="1" vector-effect="non-scaling-stroke"';
+  DOORS.forEach(d => {
+    const [hx,hy] = d.h, L = d.len, T = 40;
+    const ox = hx + d.o[0]*L, oy = hy + d.o[1]*L, cx = hx + d.c[0]*L, cy = hy + d.c[1]*L;
+    const sweep = d.o[0]*d.c[1] - d.o[1]*d.c[0] > 0 ? 1 : 0;
+    const col = d.entry ? '#b5653a' : '#3d3a34';
+    s += `<polygon points="${hx},${hy} ${ox},${oy} ${ox+d.c[0]*T},${oy+d.c[1]*T} ${hx+d.c[0]*T},${hy+d.c[1]*T}" fill="#fff" stroke="${col}" stroke-width="${d.entry?1.8:1}" vector-effect="non-scaling-stroke"/>`;
+    s += `<path d="M${ox} ${oy}A${L} ${L} 0 0 ${sweep} ${cx} ${cy}" fill="none" ${DS} stroke-dasharray="5 3" opacity=".7"/>`;
+  });
+  SLIDES.forEach(({rect:[x0,y0,x1,y1],v}) => {
+    if (v){ const L = y1-y0, m = (x0+x1)/2; s += `<rect x="${m-45}" y="${y0}" width="40" height="${L*.55}" fill="#fff" ${DS}/><rect x="${m+5}" y="${y1-L*.55}" width="40" height="${L*.55}" fill="#fff" ${DS}/>`; }
+    else { const L = x1-x0, m = (y0+y1)/2; s += `<rect x="${x0}" y="${m-45}" width="${L*.55}" height="40" fill="#fff" ${DS}/><rect x="${x1-L*.55}" y="${m+5}" width="${L*.55}" height="40" fill="#fff" ${DS}/>`; }
+  });
+  const entry = entryGeometry();
+  if (entry){
+    const {x,y,dx,dy} = entry, a = Math.atan2(dy,dx)*180/Math.PI;
+    s += `<g transform="translate(${x} ${y}) rotate(${a})"><path d="M-1100 0H-180M-380 -140L-180 0L-380 140" fill="none" stroke="#b5653a" stroke-width="2" vector-effect="non-scaling-stroke"/></g><text x="${x-dx*1100}" y="${y-dy*1100-160}" font-size="180" fill="#b5653a">${tr('入户','Entry')}</text>`;
+  }
+  // plan lights: red = spots/tracks, blue = pendants, green = sconces, violet dashed = ceiling LED
+  const LS = (c, w = 1.2) => `stroke="${c}" stroke-width="${w}" vector-effect="non-scaling-stroke"`;
+  LIGHTS.forEach(L => {
+    if (L.k === 'spot') s += `<circle cx="${L.at[0]}" cy="${L.at[1]}" r="40" fill="#fff" ${LS('#c0392b')}/>`;
+    else if (L.k === 'track') s += `<line x1="${L.a[0]}" y1="${L.a[1]}" x2="${L.b[0]}" y2="${L.b[1]}" ${LS('#c0392b', 3)} opacity=".8"/>`;
+    else if (L.k === 'pendant') s += `<circle cx="${L.at[0]}" cy="${L.at[1]}" r="90" fill="#fff" ${LS('#2f5d9a', 1.5)}/><line x1="${L.at[0]-64}" y1="${L.at[1]+64}" x2="${L.at[0]+64}" y2="${L.at[1]-64}" ${LS('#2f5d9a', 1.5)}/>`;
+    else if (L.k === 'sconce'){ const [x, y] = L.at, [dx, dy] = L.dir; s += `<path d="M${x+dy*90} ${y+dx*90}L${x+dx*120} ${y+dy*120}L${x-dy*90} ${y-dx*90}" fill="none" ${LS('#2e8b57', 2)}/>`; }
+    else if (L.k === 'led') s += `<polyline points="${L.pts.map(p => p.join(',')).join(' ')}" fill="none" ${LS('#8e44ad', 1.5)} stroke-dasharray="6 4"/>`;
+  });
+  $('#gOpen').innerHTML = s;
+}
+
+function renderLabels(){
+  const g = $('#gLabels');
+  g.setAttribute('display', ui.layers.labels ? 'inline' : 'none');
+  g.innerHTML = ROOMS.filter(r => r.at).map(r => {
+    const [x,y] = r.at, halo = 'stroke="#fbf9f4" stroke-width="45" paint-order="stroke" stroke-linejoin="round"';
+    return `<text x="${x}" y="${y}" font-size="250" font-weight="600" text-anchor="middle" fill="#2b2824" ${halo}>${esc(nm(state.rooms[r.id].name))}</text>
+      <text x="${x}" y="${y+260}" font-size="175" text-anchor="middle" fill="#7d7366" ${halo}>${fmt(area(r.poly))} m²</text>`;
+  }).join('');
+}
+
+function renderDims(){
+  const DC = '#7d7160', LS = `stroke="${DC}" stroke-width="1" vector-effect="non-scaling-stroke"`, TK = `stroke="${DC}" stroke-width="2" vector-effect="non-scaling-stroke"`;
+  const txt = (x,y,v,rot) => `<text x="${x}" y="${y}" font-size="${v<400?140:200}" text-anchor="middle" fill="${DC}" ${rot?`transform="rotate(-90 ${x} ${y})"`:''}>${v}</text>`;
+  const chain = (horiz, at, start, segs) => {
+    const pts = [start]; segs.forEach(v => pts.push(pts[pts.length-1]+v));
+    let s = horiz ? `<line x1="${pts[0]}" y1="${at}" x2="${pts.at(-1)}" y2="${at}" ${LS}/>` : `<line x1="${at}" y1="${pts[0]}" x2="${at}" y2="${pts.at(-1)}" ${LS}/>`;
+    pts.forEach(p => s += horiz
+      ? `<line x1="${p}" y1="${at-170}" x2="${p}" y2="${at+170}" ${LS}/><line x1="${p-80}" y1="${at+80}" x2="${p+80}" y2="${at-80}" ${TK}/>`
+      : `<line x1="${at-170}" y1="${p}" x2="${at+170}" y2="${p}" ${LS}/><line x1="${at-80}" y1="${p+80}" x2="${at+80}" y2="${p-80}" ${TK}/>`);
+    segs.forEach((v,i) => { const mid = (pts[i]+pts[i+1])/2; s += horiz ? txt(mid, at-70, v) : txt(at-70, mid, v, true); });
+    return s;
+  };
+  const g = $('#gDims');
+  g.innerHTML = planDims().map(d => chain(d.horiz,d.at,d.start,d.segs)).join('');
+  g.setAttribute('display', ui.layers.dims ? 'inline' : 'none');
+}
+
+function renderGrid(){
+  $('#gGrid').innerHTML = `<rect x="-20000" y="-20000" width="55000" height="55000" fill="${ui.layers.grid ? 'url(#grid)' : 'transparent'}" data-bg="1"/>`;
+}
+
+function renderMeasure(){
+  const k = 1/view.s, fs = 12*k;
+  const one = (a,b,tmp) => {
+    const L = Math.hypot(b.x-a.x, b.y-a.y); if (L < 1) return '';
+    let ang = Math.atan2(b.y-a.y, b.x-a.x)*180/Math.PI; if (ang > 90 || ang < -90) ang += 180;
+    const mx = (a.x+b.x)/2, my = (a.y+b.y)/2, nx = -(b.y-a.y)/L*5*k, ny = (b.x-a.x)/L*5*k;
+    const col = tmp ? '#2f5d62' : '#b5653a', S = `stroke="${col}" stroke-width="1.5" vector-effect="non-scaling-stroke"`;
+    return `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" ${S}/>
+      <line x1="${a.x-nx}" y1="${a.y-ny}" x2="${a.x+nx}" y2="${a.y+ny}" ${S}/><line x1="${b.x-nx}" y1="${b.y-ny}" x2="${b.x+nx}" y2="${b.y+ny}" ${S}/>
+      <text x="${mx}" y="${my-5*k}" font-size="${fs}" text-anchor="middle" fill="${col}" font-weight="600" transform="rotate(${ang} ${mx} ${my})"
+        stroke="#fff" stroke-width="${3.5*k}" paint-order="stroke">${Math.round(L)} mm</text>`;
+  };
+  let s = state.measures.map(m => one(m.a,m.b)).join('');
+  if (ui.mA && ui.mCur) s += one(ui.mA, ui.mCur, true);
+  if (ui.mA) s += `<circle cx="${ui.mA.x}" cy="${ui.mA.y}" r="${3*k}" fill="#2f5d62"/>`;
+  $('#gMeasure').innerHTML = s;
+}
+
+function renderSel(){
+  const k = 1/view.s; let s = '';
+  if (ui.sel?.kind === 'furn'){
+    const f = getF(ui.sel.id);
+    if (f){
+      // 触屏上手柄更大、离家具更远，并各带一圈透明的大热区
+      const p = 5*k, A = 'stroke="#b5653a" vector-effect="non-scaling-stroke"', hs = COARSE ? 1.7 : 1, ro = (COARSE ? 40 : 26)*k, hit = (COARSE ? 24 : 11)*k;
+      const sx = f.w/2+p, sy = f.d/2+p;
+      s += `<g transform="translate(${f.cx} ${f.cy}) rotate(${f.rot})">
+        <rect x="${-f.w/2-p}" y="${-f.d/2-p}" width="${f.w+2*p}" height="${f.d+2*p}" fill="none" ${A} stroke-width="1.5" stroke-dasharray="5 3" pointer-events="none"/>
+        <line x1="0" y1="${-f.d/2-p}" x2="0" y2="${-f.d/2-ro}" ${A} stroke-width="1" pointer-events="none"/>
+        <circle data-handle="rot" cx="0" cy="${-f.d/2-ro}" r="${hit}" fill="transparent"/>
+        <circle data-handle="rot" cx="0" cy="${-f.d/2-ro}" r="${6*hs*k}" fill="#fff" ${A} stroke-width="1.5"><title>${tr('拖动旋转（Shift 自由角度）','Drag to rotate (Shift for free angle)')}</title></circle>
+        <circle data-handle="size" cx="${sx}" cy="${sy}" r="${hit}" fill="transparent"/>
+        <rect data-handle="size" x="${sx-5*hs*k}" y="${sy-5*hs*k}" width="${10*hs*k}" height="${10*hs*k}" fill="#b5653a"><title>${tr('拖动调整尺寸','Drag to resize')}</title></rect></g>`;
+      const {hh} = aabb(f);
+      s += `<text x="${f.cx}" y="${f.cy+hh+24*k}" font-size="${12*k}" text-anchor="middle" fill="#b5653a" font-weight="600" pointer-events="none"
+        stroke="#fff" stroke-width="${3*k}" paint-order="stroke">${f.w} × ${f.d}</text>`;
+    }
+  } else if (ui.sel?.kind === 'room'){
+    const r = ROOMS.find(r => r.id === ui.sel.id);
+    s += `<polygon points="${r.poly.map(p=>p.join(',')).join(' ')}" fill="rgba(181,101,58,.08)" stroke="#b5653a" stroke-width="2" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
+  }
+  $('#gSel').innerHTML = s;
+}
+
+function renderAll(){
+  renderGrid(); renderRooms(); renderFurn(); renderWalls(); renderLabels(); renderMeasure(); renderSel(); renderPanel(); updateHeader();
+  window.View3D?.sync();
+}
+
+function updateHeader(){
+  const tot = ROOMS.filter(r => r.counted !== false).reduce((a,r) => a + area(r.poly), 0);
+  $('.brand b').textContent = PLAN.name;
+  $('#subtitle').textContent = tr(`套内使用面积约 ${fmt(tot)} m² · 尺寸单位 mm`, `Net floor area ≈ ${fmt(tot)} m² · Units: mm`);
+  $('#undo').disabled = !undoStack.length; $('#redo').disabled = !redoStack.length;
+  $('#undo').style.opacity = undoStack.length ? 1 : .4; $('#redo').style.opacity = redoStack.length ? 1 : .4;
+}
+
+/* ======================= 右侧面板 ======================= */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function renderPanel(){
+  renderFab();
+  const p = $('#panel');
+  if (ui.sel?.kind === 'furn'){ const f = getF(ui.sel.id); if (f){ p.innerHTML = furnPanel(f); bindFurnPanel(f); return; } }
+  if (ui.sel?.kind === 'room'){ p.innerHTML = roomPanel(ROOMS.find(r => r.id === ui.sel.id)); bindRoomPanel(); return; }
+  p.innerHTML = overviewPanel(); bindOverview();
+}
+
+// Offline planning allowances for Russian retail in 2026, RUB/m².
+// Chinese locales retain the upstream CNY table; this is not an FX conversion.
+const FLOOR_RUB = {wood:4500,walnut:6500,tile800:2400,tile600:1800,marble:9500,antislip:1600,terrazzo:3200,carpet:1500};
+const floorRubles = () => LANG === 'ru' || LANG === 'en';
+const floorPrice = id => floorRubles() ? FLOOR_RUB[id] : MATS[id].price;
+const floorMoney = value => floorRubles() ? Math.round(value).toLocaleString(LANG === 'ru' ? 'ru-RU' : 'en-US')+' ₽' : '¥'+Math.round(value).toLocaleString('zh-CN');
+const floorNote = () => floorRubles()
+  ? tr('','Approximate 2026 prices, ₽/m². Materials + 5% waste; labour, delivery and underlay excluded. Not a shop quotation.')
+  : tr('原项目示例价格，单位人民币，非本地报价。','Illustrative upstream prices in CNY; not a local quotation.');
+
+function overviewPanel(){
+  const rows = ROOMS.map(r => {
+    const st = state.rooms[r.id];
+    return `<tr class="click" data-room="${r.id}"><td><span class="sw" style="background:${MATS[st.mat].sw}"></span>${esc(nm(st.name))}${r.counted===false?' <span class="muted">*</span>':''}</td>
+      <td class="r">${fmt(area(r.poly))} m²</td></tr>`;
+  }).join('');
+  const tot = ROOMS.filter(r => r.counted !== false).reduce((a,r) => a + area(r.poly), 0);
+  const byMat = {};
+  ROOMS.forEach(r => { const m = state.rooms[r.id].mat; byMat[m] = (byMat[m]||0) + area(r.poly); });
+  let cost = 0;
+  const matRows = Object.entries(byMat).map(([m,a]) => { const c = a*floorPrice(m)*1.05; cost += c;
+    return `<tr><td><span class="sw" style="background:${MATS[m].sw}"></span>${nm(MATS[m].name)}</td><td class="r">${fmt(a,1)} m²</td><td class="r">${floorMoney(c)}</td></tr>`; }).join('');
+  const dem = state.demolished.map(id => WALLS[+id.slice(1)]);
+  const demLen = dem.reduce((a,w) => a + Math.max(w[2]-w[0], w[3]-w[1]), 0) / 1000;
+  return `
+  <section><h3>${tr('房间面积','Room Areas')} <small>${tr('点击查看 / 更换地面','Click to view / change flooring')}</small></h3>
+    <table>${rows}</table>
+    <div class="total"><span>${tr('套内使用面积','Net floor area')}</span><b>${fmt(tot)} m²</b></div>
+    <div class="muted" style="font-size:11px;margin-top:4px">${tr('* 飘窗不计入使用面积；面积按墙体内净尺寸计算','* Bay windows are excluded; areas use net inner wall dimensions')}</div></section>
+  <section><h3>${tr('地面材料估算','Flooring Estimate')} <small>${tr('含 5% 损耗','incl. 5% waste')}</small></h3>
+    <table>${matRows}</table><p class="muted">${floorNote()}</p>
+    <div class="total"><span>${tr('地面材料合计','Flooring total')}</span><b>${floorMoney(cost)}</b></div></section>
+  <section><h3>${tr('方案统计','Plan Stats')}</h3>
+    <div class="stats"><div><small>${tr('家具数量','Furniture')}</small><span class="big">${state.furniture.length}</span></div>
+      <div><small>${tr('拆除墙体','Walls removed')}</small><span class="big">${fmt(demLen,1)}</span> m</div></div>
+    <div class="actions"><button class="btn" id="clearMeasure">${tr('清除测量','Clear measures')} (${state.measures.length})</button>
+      <button class="btn danger" id="clearFurn">${tr('清空布置','Clear layout')}</button></div></section>
+  ${COARSE ? tr(`<section><h3>触屏操作</h3><div class="kbd">
+    <kbd>单指拖动</kbd><span>空白处平移画面</span><kbd>双指</kbd><span>捏合缩放、拖动平移</span>
+    <kbd>家具库</kbd><span>点一下放到画面中央，或按住向右拖到指定位置</span>
+    <kbd>点家具</kbd><span>选中后拖动移动；拖顶部圆点旋转、右下方块改尺寸</span>
+    <kbd>工具条</kbd><span>选中后底部可旋转 / 复制 / 删除</span>
+    <kbd>测量</kbd><span>按住拖出一条线，或依次点两点</span>
+    <kbd>3D 漫游</kbd><span>左下摇杆移动，拖动屏幕转向，点门开关</span>
+  </div></section>`, `<section><h3>Touch Controls</h3><div class="kbd">
+    <kbd>1-finger drag</kbd><span>Pan on empty space</span><kbd>2 fingers</kbd><span>Pinch to zoom, drag to pan</span>
+    <kbd>Library</kbd><span>Tap to place at center, or hold and drag right to a spot</span>
+    <kbd>Tap item</kbd><span>Drag to move; top dot rotates, bottom-right square resizes</span>
+    <kbd>Toolbar</kbd><span>Bottom bar can rotate / duplicate / delete</span>
+    <kbd>Measure</kbd><span>Hold and drag a line, or tap two points</span>
+    <kbd>3D walk</kbd><span>Joystick moves, drag to look, tap doors to open</span>
+  </div></section>`) : ''}
+  ${tr(`<section><h3>键盘快捷键</h3><div class="kbd">
+    <kbd>拖拽</kbd><span>左侧家具拖入平面图</span><kbd>V</kbd><span>选择 / 移动</span><kbd>M</kbd><span>测量（Shift 水平/垂直）</span>
+    <kbd>X</kbd><span>拆改非承重墙（黑色为承重墙）</span><kbd>R</kbd><span>旋转 90°（Shift 反向）</span><kbd>方向键</kbd><span>微调 10mm（Shift 100mm）</span>
+    <kbd>⌘/Ctrl D</kbd><span>复制</span><kbd>Delete</kbd><span>删除</span><kbd>⌘/Ctrl Z</kbd><span>撤销</span><kbd>T</kbd><span>切换 2D / 3D</span><kbd>F</kbd><span>适应窗口</span><kbd>Esc</kbd><span>取消选择</span>
+  </div></section>`, `<section><h3>Keyboard Shortcuts</h3><div class="kbd">
+    <kbd>Drag</kbd><span>Drag furniture onto the plan</span><kbd>V</kbd><span>Select / move</span><kbd>M</kbd><span>Measure (Shift: horizontal/vertical)</span>
+    <kbd>X</kbd><span>Demolish non-bearing walls (black = bearing)</span><kbd>R</kbd><span>Rotate 90° (Shift reverses)</span><kbd>Arrows</kbd><span>Nudge 10mm (Shift 100mm)</span>
+    <kbd>⌘/Ctrl D</kbd><span>Duplicate</span><kbd>Delete</kbd><span>Delete</span><kbd>⌘/Ctrl Z</kbd><span>Undo</span><kbd>T</kbd><span>Toggle 2D / 3D</span><kbd>F</kbd><span>Fit to window</span><kbd>Esc</kbd><span>Deselect</span>
+  </div></section>`)}`;
+}
+function bindOverview(){
+  document.querySelectorAll('#panel tr[data-room]').forEach(tr => tr.onclick = () => { select({kind:'room', id:tr.dataset.room}); if (is3D()) window.View3D.flyToRoom(tr.dataset.room); });
+  $('#clearMeasure').onclick = () => state.measures.length && mutate(() => state.measures = []);
+  $('#clearFurn').onclick = clearLayout;
+}
+
+// 底部浮动工具条：触屏没有键盘，旋转 / 复制 / 删除都放在这里
+function renderFab(){
+  const fab = $('#fab'), f = ui.sel?.kind === 'furn' && getF(ui.sel.id), r = ui.sel?.kind === 'room' && ROOMS.find(r => r.id === ui.sel.id);
+  if (!f && !r){ fab.classList.remove('show'); return; }
+  fab.innerHTML = f
+    ? `<span class="name">${esc(nm(f.name))}</span><button class="btn" data-a="rotL">↺</button><button class="btn" data-a="rotR">↻ ${tr('旋转','Rotate')}</button>
+       <button class="btn" data-a="dup">${tr('复制','Duplicate')}</button><button class="btn danger" data-a="del">${tr('删除','Delete')}</button><span class="sep"></span>
+       <button class="btn narrow-only" data-a="prop">${tr('属性','Properties')}</button><button class="btn" data-a="done">${tr('完成','Done')}</button>`
+    : `<span class="name">${esc(nm(state.rooms[r.id].name))}</span><button class="btn narrow-only" data-a="prop">${tr('地面 / 属性','Floor / Properties')}</button><button class="btn" data-a="done">${tr('完成','Done')}</button>`;
+  fab.classList.add('show');
+  fab.querySelectorAll('[data-a]').forEach(b => b.onclick = () => ({
+    rotL:() => rotateSel(-90), rotR:() => rotateSel(90), dup:duplicateSel, del:deleteSel,
+    prop:() => drawer('panel', true), done:() => { select(null); closeDrawers(); },
+  })[b.dataset.a]());
+}
+
+/* clearLayout is provided by file-ui.js. */
+
+/* 侧栏开合：which = 'lib' | 'panel' | null，open 不传则切换。
+ * 宽屏：侧栏在布局中收起 / 展开（记住选择）；窄屏：侧栏是浮层抽屉，一次只开一个，which = null 表示全部关闭 */
+const PANES = () => STORE+':panes';
+const panes = (() => { try { return JSON.parse(localStorage.getItem(PANES())) || {}; } catch(e) { return {}; } })();
+function drawer(which, open){
+  const app = $('.app'), els = {lib:$('aside.lib'), panel:$('aside.right')}, n = narrow();
+  if (n){
+    Object.entries(els).forEach(([k, el]) => el.classList.toggle('open', k === which && (open ?? !el.classList.contains('open'))));
+  } else {
+    Object.values(els).forEach(el => el.classList.remove('open'));
+    if (which){
+      const k = which === 'lib' ? 'hideLib' : 'hidePanel';
+      panes[k] = open === undefined ? !panes[k] : !open;
+      try { localStorage.setItem(PANES(), JSON.stringify(panes)); } catch(e) {}
+    }
+  }
+  app.classList.toggle('hide-lib', !!panes.hideLib); app.classList.toggle('hide-panel', !!panes.hidePanel);
+  syncPaneBtns();
+}
+function syncPaneBtns(){
+  const els = {lib:$('aside.lib'), panel:$('aside.right')}, n = narrow();
+  const vis = k => n ? els[k].classList.contains('open') : !panes[k === 'lib' ? 'hideLib' : 'hidePanel'];
+  $('#tgLib').classList.toggle('on', vis('lib')); $('#tgPanel').classList.toggle('on', vis('panel'));
+  $('#tgLib').title = vis('lib') ? tr('收起家具库 ( [ )', 'Hide library ( [ )') : tr('展开家具库 ( [ )', 'Show library ( [ )');
+  $('#tgPanel').title = vis('panel') ? tr('收起属性面板 ( ] )', 'Hide properties ( ] )') : tr('展开属性面板 ( ] )', 'Show properties ( ] )');
+  $('#stage').classList.toggle('drawer-panel', n && vis('panel'));   // 属性抽屉盖住画面时让出底部工具条
+}
+function closeDrawers(){ if (narrow()) drawer(null); }
+
+function roomPanel(r){
+  const st = state.rooms[r.id], a = area(r.poly), [x0,y0,x1,y1] = bbox(r.poly), inside = state.furniture.filter(f => f.cx>x0&&f.cx<x1&&f.cy>y0&&f.cy<y1);
+  const mats = Object.entries(MATS).map(([k,m]) => `<button class="mat ${k===st.mat?'on':''}" data-mat="${k}"><i style="background:${m.sw}"></i><span>${nm(m.name)}<small>${floorMoney(floorPrice(k))}/m²</small></span></button>`).join('');
+  return `<section><h3>${tr('房间','Room')}</h3>
+    <div class="form"><label class="full">${tr('名称','Name')}<input id="rName" value="${esc(nm(st.name))}"></label></div>
+    <div class="stats" style="margin-top:10px">
+      <div><small>${tr('使用面积','Floor area')}</small><span class="big">${fmt(a)}</span> m²</div>
+      <div><small>${tr('周长','Perimeter')}</small><span class="big">${fmt(perim(r.poly),1)}</span> m</div>
+      <div><small>${tr('开间','Width')}</small><span class="big">${x1-x0}</span> mm</div>
+      <div><small>${tr('进深','Depth')}</small><span class="big">${y1-y0}</span> mm</div></div>
+    <div class="muted">${tr(`墙面面积（层高 ${H}m，未扣门窗）约 ${fmt(perim(r.poly)*H,1)} m²`, `Wall area (${H}m ceiling, openings not deducted) ≈ ${fmt(perim(r.poly)*H,1)} m²`)}</div></section>
+  <section><h3>${tr('地面材料','Flooring')}</h3><div class="mats">${mats}</div><p class="muted">${floorNote()}</p>
+    <div class="total"><span>${tr('材料估价','Estimated cost')}</span><b>${floorMoney(a*floorPrice(st.mat)*1.05)}</b></div></section>
+  <section><h3>${tr('房间内家具','Furniture in room')} <small>${tr(`${inside.length} 件`, `${inside.length} items`)}</small></h3>
+    <table>${inside.map(f => `<tr class="click" data-fid="${f.id}"><td>${esc(nm(f.name))}</td><td class="r muted">${f.w}×${f.d}</td></tr>`).join('') || `<tr><td class="muted">${tr('暂无','None')}</td></tr>`}</table>
+    <div class="actions"><button class="btn" id="back">${tr('← 返回总览','← Back to overview')}</button></div></section>`;
+}
+function bindRoomPanel(){
+  const id = ui.sel.id;
+  $('#rName').onchange = e => mutate(() => state.rooms[id].name = e.target.value.trim() || state.rooms[id].name);
+  document.querySelectorAll('#panel [data-mat]').forEach(b => b.onclick = () => mutate(() => state.rooms[id].mat = b.dataset.mat));
+  document.querySelectorAll('#panel tr[data-fid]').forEach(tr => tr.onclick = () => select({kind:'furn', id:tr.dataset.fid}));
+  $('#back').onclick = () => select(null);
+}
+
+function furnPanel(f){
+  return `<section><h3>${tr('家具属性','Furniture')}</h3>
+    <div class="form">
+      <label class="full">${tr('名称','Name')}<input id="fName" value="${esc(nm(f.name))}"></label>
+      <label>${tr('宽','Width')} (mm)<input type="number" id="fW" value="${f.w}" min="50" step="10"></label>
+      <label>${tr('深','Depth')} (mm)<input type="number" id="fD" value="${f.d}" min="50" step="10"></label>
+      <label>${tr('中心','Center')} X (mm)<input type="number" id="fX" value="${Math.round(f.cx)}" step="10"></label>
+      <label>${tr('中心','Center')} Y (mm)<input type="number" id="fY" value="${Math.round(f.cy)}" step="10"></label>
+      <label>${tr('旋转','Rotation')} (°)<input type="number" id="fR" value="${f.rot}" step="15"></label>
+      <label>${tr('颜色','Color')}<input type="color" id="fC" value="${f.color}"></label>
+    </div>
+    <div class="muted" style="margin-top:8px">${tr('占地面积','Footprint')} ${fmt(f.w*f.d/1e6)} m²</div>
+    <div class="actions">
+      <button class="btn" id="aRot">${tr('旋转 90°','Rotate 90°')}</button><button class="btn" id="aDup">${tr('复制','Duplicate')}</button>
+      <button class="btn" id="aTop">${tr('置于顶层','Bring to front')}</button><button class="btn" id="aBot">${tr('置于底层','Send to back')}</button>
+      <button class="btn danger" id="aDel">${tr('删除','Delete')}</button><button class="btn" id="back">${tr('← 返回','← Back')}</button>
+    </div></section>
+  <section class="muted" style="font-size:12px">${tr('拖动家具移动；拖动上方圆点旋转；拖动右下角方块调整尺寸。开启「贴墙吸附」后靠近墙面会自动贴齐。', 'Drag to move; drag the top dot to rotate; drag the bottom-right square to resize. With "Wall snap" on, items snap flush to nearby walls.')}</section>`;
+}
+function bindFurnPanel(f){
+  const upd = (fn) => mutate(() => { const g = getF(f.id); if (g) fn(g); });
+  const num = (id, fn) => $(id).onchange = e => { const v = parseFloat(e.target.value); if (!isNaN(v)) upd(g => fn(g, v)); };
+  $('#fName').onchange = e => upd(g => g.name = e.target.value.trim() || g.name);
+  num('#fW', (g,v) => g.w = Math.max(50, Math.round(v)));
+  num('#fD', (g,v) => g.d = Math.max(50, Math.round(v)));
+  num('#fX', (g,v) => g.cx = v); num('#fY', (g,v) => g.cy = v); num('#fR', (g,v) => g.rot = norm(v));
+  $('#fC').onchange = e => upd(g => g.color = e.target.value);
+  $('#aRot').onclick = () => rotateSel(90);
+  $('#aDup').onclick = duplicateSel;
+  $('#aDel').onclick = deleteSel;
+  $('#aTop').onclick = () => mutate(() => { const i = state.furniture.findIndex(g => g.id===f.id); state.furniture.push(...state.furniture.splice(i,1)); });
+  $('#aBot').onclick = () => mutate(() => { const i = state.furniture.findIndex(g => g.id===f.id); state.furniture.unshift(...state.furniture.splice(i,1)); });
+  $('#back').onclick = () => select(null);
+}
+
+/* ======================= 操作 ======================= */
+function select(sel){ ui.sel = sel; renderSel(); renderPanel(); }
+function rotateSel(d){ if (ui.sel?.kind==='furn') mutate(() => { const f = getF(ui.sel.id); f.rot = norm(f.rot + d); }); }
+function deleteSel(){ if (ui.sel?.kind==='furn'){ const id = ui.sel.id; ui.sel = null; mutate(() => state.furniture = state.furniture.filter(f => f.id !== id)); } }
+function duplicateSel(){
+  if (ui.sel?.kind !== 'furn') return;
+  const f = getF(ui.sel.id), n = {...f, id:uid(), cx:f.cx+200, cy:f.cy+200};
+  ui.sel = {kind:'furn', id:n.id}; mutate(() => state.furniture.push(n));
+}
+// 新放下的家具若压在墙 / 窗上，沿穿透较浅的方向推出来，刚好贴墙
+function pushOut(f){
+  for (let n = 0; n < 4; n++){
+    let moved = false;
+    for (const r of snapRects()){
+      const {hw, hh} = aabb(f), ox = Math.min(f.cx+hw, r[2]) - Math.max(f.cx-hw, r[0]), oy = Math.min(f.cy+hh, r[3]) - Math.max(f.cy-hh, r[1]);
+      if (ox <= 0 || oy <= 0) continue;
+      if (ox < oy) f.cx = f.cx < (r[0]+r[2])/2 ? r[0]-hw : r[2]+hw;
+      else f.cy = f.cy < (r[1]+r[3])/2 ? r[1]-hh : r[3]+hh;
+      moved = true;
+    }
+    if (!moved) return;
+  }
+}
+function addItem(it, x, y){
+  const [type,name,w,d,color] = it, f = F(type,name,Math.round(x/10)*10,Math.round(y/10)*10,w,d,0,color);
+  pushOut(f);
+  ui.sel = {kind:'furn', id:f.id};
+  mutate(() => type==='rug' ? state.furniture.unshift(f) : state.furniture.push(f));
+  toast(tr(`已添加「${name}」${w}×${d}`, `Added "${nm(name)}" ${w}×${d}`));
+}
+function toggleWall(id){
+  const w = WALLS[+id.slice(1)];
+  if (w[4]==='b') return toast(tr('承重墙（黑色）不可拆除', 'Load-bearing walls (black) cannot be removed'));
+  if (w[4]==='e') return toast(tr('外墙属于建筑外围护结构，不建议拆除', 'Exterior walls are part of the building envelope and should not be removed'));
+  const on = state.demolished.includes(id);
+  mutate(() => state.demolished = on ? state.demolished.filter(x => x!==id) : [...state.demolished, id]);
+  toast(on ? tr('已恢复墙体', 'Wall restored') : tr(`已标记拆除 ${Math.max(w[2]-w[0], w[3]-w[1])} mm 墙体`, `Marked ${Math.max(w[2]-w[0], w[3]-w[1])} mm of wall for removal`));
+}
+
+function setTool(t){
+  ui.tool = t; ui.mA = null; ui.mCur = null;
+  svg.setAttribute('class', 'tool-' + t);
+  document.querySelectorAll('#tools .btn').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
+  syncModeHint();
+  renderMeasure();
+}
+function syncModeHint(){
+  const hints = {select:'',
+    measure:COARSE ? tr('按住拖出测量线，或依次点两点 · 靠近墙面自动吸附 · 点「选择」退出', 'Hold and drag a line, or tap two points · snaps to walls · tap "Select" to exit')
+      : tr('点击两点（或按住拖动）测量距离 · 靠近墙面自动吸附 · Shift 锁定水平/垂直 · Esc 取消', 'Click two points (or drag) to measure · snaps to walls · Shift locks horizontal/vertical · Esc cancels'),
+    demolish:tr('点击灰色非承重墙标记拆除，再次点击恢复 · 黑色承重墙不可拆', 'Click a grey non-bearing wall to remove it, click again to restore · black bearing walls cannot be removed')};
+  const h = $('#modehint'); h.textContent = hints[ui.tool]; h.classList.toggle('show', !!hints[ui.tool]);
+}
+
+/* ======================= 视图 ======================= */
+function applyView(){
+  const W = svg.clientWidth, H = svg.clientHeight;
+  svg.setAttribute('viewBox', `${view.x0} ${view.y0} ${W/view.s} ${H/view.s}`);
+  const ratio = 1/(view.s*PX_MM);
+  $('#ratio').textContent = '1:' + Math.round(ratio);
+  const nice = [100,200,500,1000,2000,5000].find(v => v*view.s >= 60) || 5000;
+  $('#sbBar').style.width = nice*view.s + 'px';
+  $('#sbText').textContent = nice >= 1000 ? `${nice/1000} m` : `${nice} mm`;
+  renderSel(); renderMeasure();
+}
+function fitView(){
+  const W = svg.clientWidth, H = svg.clientHeight;
+  view.s = Math.min(W/BOUNDS.w, H/BOUNDS.h);
+  view.x0 = BOUNDS.x - (W/view.s - BOUNDS.w)/2; view.y0 = BOUNDS.y - (H/view.s - BOUNDS.h)/2;
+  applyView();
+}
+function zoomAt(ns, mx, my){
+  ns = Math.max(.012, Math.min(2, ns));
+  const px = view.x0 + mx/view.s, py = view.y0 + my/view.s;
+  view.s = ns; view.x0 = px - mx/ns; view.y0 = py - my/ns; applyView();
+}
+const zoomCenter = k => zoomAt(view.s*k, svg.clientWidth/2, svg.clientHeight/2);
+const setRatio = r => zoomAt(1/(r*PX_MM), svg.clientWidth/2, svg.clientHeight/2);
+
+function toMM(e){
+  const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+  return pt.matrixTransform(svg.getScreenCTM().inverse());
+}
+
+/* ======================= 吸附 ======================= */
+const grid = () => 10;
+function snapMove(f, cx, cy){
+  let nx = Math.round(cx/grid())*grid(), ny = Math.round(cy/grid())*grid();
+  if (!ui.layers.wallSnap) return [nx, ny];
+  const {hw, hh} = aabb(f), tol = 10/view.s;
+  let bx = tol, by = tol;
+  for (const r of snapRects()){
+    if (!(r[3] < cy-hh-tol || r[1] > cy+hh+tol)) for (const ex of [r[0], r[2]]) for (const c of [ex+hw, ex-hw]) if (Math.abs(c-cx) < bx){ bx = Math.abs(c-cx); nx = c; }
+    if (!(r[2] < cx-hw-tol || r[0] > cx+hw+tol)) for (const ey of [r[1], r[3]]) for (const c of [ey+hh, ey-hh]) if (Math.abs(c-cy) < by){ by = Math.abs(c-cy); ny = c; }
+  }
+  return [nx, ny];
+}
+function snapPoint(p, shift){
+  let x = Math.round(p.x/10)*10, y = Math.round(p.y/10)*10;
+  const tol = 8/view.s; let bx = tol, by = tol;
+  for (const r of snapRects()){
+    for (const ex of [r[0], r[2]]) if (Math.abs(ex-p.x) < bx){ bx = Math.abs(ex-p.x); x = ex; }
+    for (const ey of [r[1], r[3]]) if (Math.abs(ey-p.y) < by){ by = Math.abs(ey-p.y); y = ey; }
+  }
+  if (shift && ui.mA){ if (Math.abs(x-ui.mA.x) > Math.abs(y-ui.mA.y)) y = ui.mA.y; else x = ui.mA.x; }
+  return {x, y};
+}
+
+/* ======================= 指针交互 ======================= */
+let drag = null, pinch = null;
+const touches = new Map();                     // 当前按在平面图上的手指
+const svgXY = (x, y) => { const r = svg.getBoundingClientRect(); return [x - r.left, y - r.top]; };
+function pinchInfo(){
+  const [a, b] = [...touches.values()];
+  return {d:Math.max(1, Math.hypot(b.x-a.x, b.y-a.y)), c:svgXY((a.x+b.x)/2, (a.y+b.y)/2)};
+}
+// 结束当前拖动：移动过的家具记入撤销栈
+function endDrag(cancel){
+  const d = drag; drag = null; svg.classList.remove('panning');
+  if (!d) return;
+  if (d.kind === 'measure'){
+    if (cancel){ ui.mA = ui.mCur = null; renderMeasure(); return; }
+    if (d.moved && ui.mA && ui.mCur && Math.hypot(ui.mCur.x-ui.mA.x, ui.mCur.y-ui.mA.y) > 20){
+      const a = ui.mA, b = ui.mCur; ui.mA = ui.mCur = null; mutate(() => state.measures.push({a, b}));
+    }
+    renderMeasure(); return;                   // 没拖动：保留起点，等第二次点击
+  }
+  if (d.kind === 'pan'){
+    if (!cancel && !d.moved && ui.tool === 'select') select(d.room ? {kind:'room', id:d.room} : null);
+    return;
+  }
+  if (d.moved){ commit(d.before); renderAll(); }
+}
+
+svg.addEventListener('pointerdown', e => {
+  if (e.button === 1 || e.button === 2) return;
+  closeDrawers(); $('details.menu').open = false;
+  if (e.pointerType !== 'mouse'){
+    touches.set(e.pointerId, {x:e.clientX, y:e.clientY});
+    svg.setPointerCapture(e.pointerId);
+    if (touches.size >= 2){                    // 第二根手指落下：取消单指操作，进入双指缩放 / 平移
+      endDrag(drag?.kind === 'measure' || drag?.kind === 'pan');
+      const {d, c} = pinchInfo();
+      pinch = {d, c, s:view.s, px:view.x0 + c[0]/view.s, py:view.y0 + c[1]/view.s};
+      return;
+    }
+  }
+  if (pinch) return;
+  const p = toMM(e), t = e.target;
+  if (ui.tool === 'measure'){
+    const q = snapPoint(p, e.shiftKey);
+    if (!ui.mA){ ui.mA = q; ui.mCur = q; drag = {kind:'measure', sx:e.clientX, sy:e.clientY, moved:false}; svg.setPointerCapture(e.pointerId); }
+    else { const a = ui.mA; ui.mA = null; ui.mCur = null; if (Math.hypot(q.x-a.x, q.y-a.y) > 20) mutate(() => state.measures.push({a, b:q})); }
+    renderMeasure(); return;
+  }
+  const h = t.closest('[data-handle]');
+  if (h && ui.sel?.kind === 'furn'){
+    drag = {kind:h.dataset.handle, id:ui.sel.id, sx:e.clientX, sy:e.clientY, before:snap(), moved:false};
+  } else if (ui.tool === 'demolish' && t.closest('[data-wall]')){
+    toggleWall(t.closest('[data-wall]').dataset.wall); return;
+  } else if (ui.tool === 'select' && t.closest('[data-fid]')){
+    const f = getF(t.closest('[data-fid]').dataset.fid);
+    if (ui.sel?.id !== f.id) select({kind:'furn', id:f.id});
+    drag = {kind:'move', id:f.id, sx:e.clientX, sy:e.clientY, ox:p.x-f.cx, oy:p.y-f.cy, before:snap(), moved:false};
+  } else {
+    const room = t.closest('[data-room]');
+    drag = {kind:'pan', sx:e.clientX, sy:e.clientY, x0:view.x0, y0:view.y0, room:room && room.dataset.room, moved:false};
+  }
+  svg.setPointerCapture(e.pointerId);
+});
+
+svg.addEventListener('pointermove', e => {
+  if (touches.has(e.pointerId)) touches.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (pinch){
+    if (touches.size < 2) return;
+    const {d, c} = pinchInfo(), ns = Math.max(.012, Math.min(2, pinch.s * d / pinch.d));
+    view.s = ns; view.x0 = pinch.px - c[0]/ns; view.y0 = pinch.py - c[1]/ns; applyView();
+    return;
+  }
+  const p = toMM(e);
+  $('#cx').textContent = Math.round(p.x) + ' mm'; $('#cy').textContent = Math.round(p.y) + ' mm';
+  if (!drag){
+    const room = e.target.closest && e.target.closest('[data-room]');
+    $('#hover').innerHTML = room ? `<b>${esc(state.rooms[room.dataset.room].name)}</b> ${fmt(area(ROOMS.find(r=>r.id===room.dataset.room).poly))} m²` : '';
+    if (ui.tool === 'measure' && ui.mA){ ui.mCur = snapPoint(p, e.shiftKey); renderMeasure(); }
+    return;
+  }
+  const far = Math.hypot(e.clientX-drag.sx, e.clientY-drag.sy) >= TAP;
+  if (drag.kind === 'measure'){
+    if (far) drag.moved = true;
+    ui.mCur = snapPoint(p, e.shiftKey); renderMeasure(); return;
+  }
+  if (drag.kind === 'pan'){
+    if (!drag.moved && !far) return;
+    drag.moved = true; svg.classList.add('panning');
+    view.x0 = drag.x0 - (e.clientX-drag.sx)/view.s; view.y0 = drag.y0 - (e.clientY-drag.sy)/view.s; applyView(); return;
+  }
+  const f = getF(drag.id); if (!f) return;
+  if (!drag.moved && !far) return;             // 轻点家具不应让它抖动一下
+  drag.moved = true;
+  if (drag.kind === 'move'){
+    [f.cx, f.cy] = snapMove(f, p.x-drag.ox, p.y-drag.oy);
+  } else if (drag.kind === 'rot'){
+    let a = Math.atan2(p.y-f.cy, p.x-f.cx)*180/Math.PI + 90;
+    f.rot = norm(e.shiftKey ? a : Math.round(a/15)*15);
+  } else if (drag.kind === 'size'){
+    const a = f.rot*Math.PI/180, c = Math.cos(a), s = Math.sin(a);
+    const dx = p.x-f.cx, dy = p.y-f.cy, lx = dx*c + dy*s, ly = -dx*s + dy*c;
+    const ax = -f.w/2, ay = -f.d/2;
+    const nw = Math.max(100, Math.round((lx-ax)/10)*10), nd = Math.max(100, Math.round((ly-ay)/10)*10);
+    const mx = ax + nw/2, my = ay + nd/2;
+    f.cx += mx*c - my*s; f.cy += mx*s + my*c; f.w = nw; f.d = nd;
+  }
+  renderFurn(); renderSel();
+});
+
+function onPointerEnd(e){
+  touches.delete(e.pointerId);
+  if (pinch){ if (touches.size < 2) pinch = null; return; }   // 双指结束后，剩下的手指不再触发操作
+  endDrag(e.type === 'pointercancel');
+}
+svg.addEventListener('pointerup', onPointerEnd);
+svg.addEventListener('pointercancel', onPointerEnd);
+// 阻止 iPad Safari 把双指手势当成整页缩放
+['gesturestart','gesturechange','gestureend'].forEach(t => document.addEventListener(t, e => e.preventDefault()));
+
+svg.addEventListener('wheel', e => {
+  e.preventDefault();
+  const r = svg.getBoundingClientRect();
+  zoomAt(view.s*Math.exp(-e.deltaY*(e.ctrlKey ? .01 : .0015)), e.clientX-r.left, e.clientY-r.top);
+}, {passive:false});
+svg.addEventListener('dblclick', e => { if (ui.tool==='select' && e.target.closest('[data-fid]')) rotateSel(90); });
+svg.addEventListener('contextmenu', e => { if (ui.tool==='measure'){ e.preventDefault(); ui.mA = null; renderMeasure(); } });
+
+
+/* ======================= 键盘 ======================= */
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input,select,textarea') || document.querySelector('dialog[open]')) return;
+  if (window.View3D?.walking()) return;
+  const mod = e.metaKey || e.ctrlKey, k = ({BracketLeft:'[',BracketRight:']',Equal:'=',NumpadAdd:'+',Minus:'-',NumpadSubtract:'-'})[e.code] || e.code.replace(/^Key/,'').toLowerCase();
+  if (mod && k === 'z'){ e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
+  if (mod && k === 'y'){ e.preventDefault(); redo(); return; }
+  if (mod && k === 'd'){ e.preventDefault(); duplicateSel(); return; }
+  if (mod) return;
+  if (k === '[' || k === ']'){ drawer(k === '[' ? 'lib' : 'panel'); return; }
+  if (k === 'f' && e.shiftKey){ toggleFullscreen(); return; }
+  if (k === 't') setView(is3D() ? '2d' : '3d');
+  else if (is3D() && ['v','m','x','f','+','=','-'].includes(k)) return;
+  else if (k === 'v') setTool('select');
+  else if (k === 'm') setTool('measure');
+  else if (k === 'x') setTool('demolish');
+  else if (k === 'f') fitView();
+  else if (k === 'r') rotateSel(e.shiftKey ? -90 : 90);
+  else if (k === 'delete' || k === 'backspace'){ e.preventDefault(); deleteSel(); }
+  else if (k === 'escape'){ if (ui.mA){ ui.mA = null; renderMeasure(); } else { if (ui.tool !== 'select') setTool('select'); select(null); } }
+  else if (k.startsWith('arrow') && ui.sel?.kind === 'furn'){
+    e.preventDefault(); const st = e.shiftKey ? 100 : 10;
+    mutate(() => { const f = getF(ui.sel.id); if (k==='arrowleft') f.cx -= st; if (k==='arrowright') f.cx += st; if (k==='arrowup') f.cy -= st; if (k==='arrowdown') f.cy += st; });
+  }
+  else if (k === '+' || k === '=') zoomCenter(1.25);
+  else if (k === '-') zoomCenter(.8);
+});
+
+/* ======================= 家具库 ======================= */
+function buildLib(){
+  $('#lib').innerHTML = LIB.map((c,ci) => `<h4>${nm(c.cat)}</h4><div class="lib-grid">${c.items.map((it,ii) => {
+    const [t,n,w,d,col] = it, pad = Math.max(w,d)*.08;
+    return `<div class="item" data-key="${ci}:${ii}" title="${tr('点击添加，或拖到平面图中的指定位置', 'Click to add, or drag onto the plan')}">
+      <svg viewBox="${-w/2-pad} ${-d/2-pad} ${w+2*pad} ${d+2*pad}">${furnSVG(t,w,d,col)}</svg><b>${esc(nm(n))}</b><small>${w}×${d}</small></div>`;
+  }).join('')}</div>`).join('') + `<div class="hint">${tr(
+    `家具按真实尺寸（mm）绘制。${COARSE ? '点一下放到画面中央，或按住向右拖到平面图 / 3D 地面上的指定位置（上下滑动为滚动列表）。' : '点击添加到画面中央，或直接拖到平面图 / 3D 地面上。'}添加后可在右侧修改宽深与颜色。`,
+    `Furniture is drawn at real size (mm). ${COARSE ? 'Tap to place at the center, or hold and drag right onto the plan / 3D floor (swipe up/down to scroll).' : 'Click to add at the center, or drag onto the plan / 3D floor.'} Edit size and color in the right panel afterwards.`)}</div>`;
+  document.querySelectorAll('.item').forEach(el => el.addEventListener('pointerdown', e => {
+    if (e.button) return;
+    libDrag = {el, id:e.pointerId, sx:e.clientX, sy:e.clientY, it:itemOf(el), ghost:null};
+  }));
+}
+const itemOf = el => { const [ci, ii] = el.dataset.key.split(':').map(Number); return LIB[ci].items[ii]; };
+
+// 家具库拖放：用 pointer 事件实现（iPad 上 HTML5 拖放不可靠）。
+// 列表设置了 touch-action:pan-y，竖向滑动交给浏览器滚动（会触发 pointercancel），横向拖动才开始拖放。
+let libDrag = null;
+// 屏幕坐标 → 户型坐标（mm）。2D 取平面图坐标，3D 取射线与地面的交点；s = 该处每 mm 的屏幕像素数
+function dropPoint(x, y){
+  const r = $('#stage').getBoundingClientRect();
+  if (x < r.left || x > r.right || y < r.top || y > r.bottom) return null;
+  if (document.elementFromPoint(x, y)?.closest('aside.open,#fab,#walkOverlay,#joy,#walkExit')) return null;
+  if (is3D()) return window.View3D?.groundAt(x, y) || null;
+  const p = toMM({clientX:x, clientY:y}); return {x:p.x, y:p.y, s:view.s};
+}
+addEventListener('pointermove', e => {
+  if (!libDrag || e.pointerId !== libDrag.id) return;
+  const {it} = libDrag;
+  if (!libDrag.ghost){
+    if (Math.hypot(e.clientX-libDrag.sx, e.clientY-libDrag.sy) < TAP) return;
+    const g = libDrag.ghost = document.createElement('div'); g.id = 'ghost';
+    g.innerHTML = `<svg viewBox="${-it[2]/2} ${-it[3]/2} ${it[2]} ${it[3]}">${furnSVG(it[0],it[2],it[3],it[4])}</svg>`;
+    document.body.appendChild(g); libDrag.el.classList.add('dragging');
+  }
+  // 幽灵图按落点处的比例显示真实大小（3D 中近大远小）
+  const g = libDrag.ghost, s = Math.max(dropPoint(e.clientX, e.clientY)?.s || (is3D() ? .05 : view.s), .02);
+  Object.assign(g.style, {width:Math.max(28, it[2]*s)+'px', height:Math.max(20, it[3]*s)+'px', left:e.clientX+'px', top:e.clientY+'px'});
+  const lib = $('aside.lib');
+  if (narrow() && lib.classList.contains('open') && e.clientX > lib.getBoundingClientRect().right) drawer(null);   // 拖出抽屉后自动收起
+});
+function endLibDrag(e, ok){
+  if (!libDrag || e.pointerId !== libDrag.id) return;
+  const d = libDrag; libDrag = null;
+  d.el.classList.remove('dragging');
+  if (d.ghost){
+    d.ghost.remove();
+    if (!ok) return;
+    const p = dropPoint(e.clientX, e.clientY);
+    if (p) addItem(d.it, p.x, p.y);
+    else if (is3D() && e.clientX > $('#stage').getBoundingClientRect().left) toast(tr('请拖到地面上', 'Drop it on the floor'));
+    return;
+  }
+  if (!ok) return;
+  // 轻点：放到选中房间中心，否则放到画面中心（3D 取屏幕中心对应的地面位置）
+  let p = null;
+  if (ui.sel?.kind === 'room'){ const b = bbox(ROOMS.find(r => r.id===ui.sel.id).poly); p = {x:(b[0]+b[2])/2, y:(b[1]+b[3])/2}; }
+  else if (is3D()){ const r = $('#stage').getBoundingClientRect(); p = window.View3D.groundAt(r.left + r.width/2, r.top + r.height/2); }
+  if (!p) p = {x:view.x0 + svg.clientWidth/2/view.s, y:view.y0 + svg.clientHeight/2/view.s};
+  addItem(d.it, p.x, p.y);
+  closeDrawers();
+}
+addEventListener('pointerup', e => endLibDrag(e, true));
+addEventListener('pointercancel', e => endLibDrag(e, false));
+
+/* ======================= 导入导出 ======================= */
+function download(name, blob){ const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); }
+function exportPNG(){
+  if (is3D()) return window.View3D.shot();
+  const clone = svg.cloneNode(true), W = 3200, H = Math.round(W*BOUNDS.h/BOUNDS.w);
+  clone.setAttribute('viewBox', `${BOUNDS.x} ${BOUNDS.y} ${BOUNDS.w} ${BOUNDS.h}`);
+  clone.setAttribute('width', W); clone.setAttribute('height', H);
+  clone.querySelector('#gSel').innerHTML = '';
+  clone.querySelector('#gGrid').innerHTML = `<rect x="-20000" y="-20000" width="55000" height="55000" fill="${ui.layers.grid?'url(#grid)':'#f7f4ee'}"/>`;
+  const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
+  Object.entries({x:-20000,y:-20000,width:55000,height:55000,fill:'#f7f4ee'}).forEach(([k,v]) => bg.setAttribute(k,v));
+  clone.insertBefore(bg, clone.querySelector('#gGrid'));
+  const img = new Image();
+  img.onload = () => {
+    const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+    cv.getContext('2d').drawImage(img, 0, 0, W, H);
+    cv.toBlob(b => download(tr('户型装修方案', 'floor-plan-design') + '.png', b));
+  };
+  img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(clone));
+}
+
+/* ======================= 杂项 ======================= */
+let toastT;
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 1800); }
+
+/* ======================= 2D / 3D 切换 ======================= */
+let viewMode = '2d', switching = false;
+const is3D = () => viewMode === '3d';
+const TIPS = () => COARSE
+  ? {'2d':tr('点或拖动家具库添加 · 单指拖动平移 · 双指缩放 · 选中家具后底部工具条可旋转 / 复制 / 删除', 'Tap or drag from the library · 1 finger pans · pinch zooms · bottom bar rotates / duplicates / deletes'),
+     '3d':tr('单指旋转 · 双指缩放 / 平移 · 点家具或地面编辑 · 点门开关', '1 finger orbits · 2 fingers zoom / pan · tap furniture or floor to edit · tap doors to open')}
+  : {'2d':tr('拖动左侧家具到平面图 · 滚轮缩放 · 拖动空白处平移 · T 切换 3D', 'Drag furniture onto the plan · scroll to zoom · drag empty space to pan · T for 3D'),
+     '3d':tr('3D 场景与平面方案实时同步 · 右侧面板修改会立即生效 · T 返回 2D', '3D stays in sync with the plan · panel edits apply instantly · T for 2D')};
+async function setView(m){
+  if (m === viewMode || switching) return;
+  if (!window.View3D) return toast(tr('3D 引擎仍在加载或加载失败（需要联网加载 three.js）', '3D engine is still loading or failed to load (three.js needs a network connection)'));
+  switching = true; document.body.classList.add('busy');
+  viewMode = m;
+  if (m === '3d'){ if (ui.tool !== 'select') setTool('select'); ui.mA = null; document.body.classList.add('m3d'); await window.View3D.enter(); }
+  else { document.body.classList.remove('m3d'); await window.View3D.exit(); applyView(); }
+  $('#tip').textContent = TIPS()[m];
+  switching = false; document.body.classList.remove('busy');
+}
+document.querySelectorAll('.menu-pop .btn').forEach(b => b.addEventListener('click', () => b.closest('details').open = false));
+document.querySelectorAll('#viewSeg .btn').forEach(b => b.onclick = () => setView(b.dataset.view));
+
+document.querySelectorAll('#tools .btn').forEach(b => b.onclick = () => setTool(b.dataset.tool));
+document.querySelectorAll('#layers .btn').forEach(b => b.onclick = () => {
+  const k = b.dataset.layer; ui.layers[k] = !ui.layers[k]; b.classList.toggle('on', ui.layers[k]);
+  if (k === 'dims') $('#gDims').setAttribute('display', ui.layers.dims ? 'inline' : 'none');
+  else if (k !== 'wallSnap') renderAll();
+});
+$('#zoomIn').onclick = () => zoomCenter(1.25);
+$('#zoomOut').onclick = () => zoomCenter(.8);
+$('#fit').onclick = fitView;
+$('#s60').onclick = () => { setRatio(60); toast(tr('已按 1:60 显示（与原始户型图同比例）', 'Showing at 1:60 (same scale as the original plan)')); };
+$('#s100').onclick = () => setRatio(100);
+$('#undo').onclick = undo; $('#redo').onclick = redo;
+$('#clearAll').onclick = clearLayout;
+
+/* 全屏：标准 API + Safari（iPad）的 webkit 前缀版本 */
+const fsEl = () => document.fullscreenElement || document.webkitFullscreenElement;
+function toggleFullscreen(){
+  const de = document.documentElement;
+  if (fsEl()) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+  else {
+    const req = de.requestFullscreen || de.webkitRequestFullscreen;
+    if (!req) return toast(tr('当前浏览器不支持网页全屏，可在 Safari 中「添加到主屏幕」后以全屏方式打开', 'Fullscreen is not supported here — in Safari, use "Add to Home Screen" to open it fullscreen'));
+    Promise.resolve(req.call(de)).catch(() => toast(tr('无法进入全屏', 'Could not enter fullscreen')));
+  }
+}
+function syncFullscreen(){
+  const on = !!fsEl(), b = $('#fullscreen');
+  b.textContent = '⛶ ' + (on ? tr('退出全屏', 'Exit fullscreen') : tr('全屏', 'Fullscreen'));
+  b.title = (on ? tr('退出全屏', 'Exit fullscreen') : tr('全屏', 'Fullscreen')) + ' (Shift+F)';
+}
+$('#fullscreen').onclick = toggleFullscreen;
+['fullscreenchange', 'webkitfullscreenchange'].forEach(t => document.addEventListener(t, syncFullscreen));
+// 已从主屏幕以独立 App 方式打开时本就是全屏，隐藏按钮
+if (navigator.standalone || matchMedia('(display-mode: standalone)').matches) $('#fullscreen').hidden = true;
+$('#tgLib').onclick = () => drawer('lib');
+$('#tgPanel').onclick = () => drawer('panel');
+// 触屏上点菜单以外的地方收起「文件」菜单
+document.addEventListener('pointerdown', e => { const m = $('details.menu'); if (m.open && !m.contains(e.target)) m.open = false; });
+matchMedia('(max-width:1100px)').addEventListener('change', () => drawer(null));
+drawer(null);                                  // 恢复上次的面板收起状态
+$('#exportPng').onclick = exportPNG;
+// File handlers are installed by file-ui.js.
+// 横竖屏切换、表头换行等都会改变画布尺寸；尺寸从 0 恢复（如首次布局）时重新适应窗口
+// 其余尺寸变化（收起 / 展开面板等）保持画面中心不动
+let lastW = 0, lastH = 0;
+new ResizeObserver(() => {
+  const w = svg.clientWidth, h = svg.clientHeight; if (!w) return;
+  if (!lastW) fitView();
+  else { view.x0 -= (w - lastW)/2/view.s; view.y0 -= (h - lastH)/2/view.s; applyView(); }
+  lastW = w; lastH = h;
+}).observe(svg);
+
+function setLang(l){
+  LANG = l; try { localStorage.setItem(LANG_KEY, l); } catch(e) {}
+  applyStaticLang(); syncFullscreen(); syncModeHint(); syncPaneBtns();
+  buildLib(); renderOpenings(); renderAll();
+  $('#tip').textContent = TIPS()[viewMode];
+  window.View3D?.relang();
+}
+$('#langSel').onclick = e => { const l = e.target.closest('[data-lang]')?.dataset.lang; if (l && l !== LANG) setLang(l); };
+
+applyStaticLang(); syncFullscreen();
+buildDefs(); buildLib(); renderOpenings(); renderDims();
+$('#tip').textContent = TIPS()['2d'];
+fitView(); renderAll();
+let dialogResolve = null;
+function askInPage(title, message, inputLabel=''){
+  // One in-page decision at a time; no dependency on window.confirm/prompt.
+  const dialog = $('#planDialog');
+  if (dialog.open) return Promise.resolve(false);
+  $('#planDialogTitle').textContent = title; $('#planDialogText').textContent = message;
+  $('#dialogCancel').textContent = tr('取消','Cancel'); $('#dialogOK').textContent = tr('继续','Continue');
+  $('#dialogInputLabel').hidden = !inputLabel; $('#dialogInputLabel').style.display = inputLabel ? '' : 'none';
+  $('#dialogInputText').textContent = inputLabel; $('#dialogInput').value = ''; $('#dialogInput').required = !!inputLabel;
+  dialog.returnValue = 'cancel'; dialog.showModal();
+  return new Promise(resolve => { dialogResolve = resolve; });
+}
+$('#planDialog').addEventListener('close', () => {
+  const resolve = dialogResolve; dialogResolve = null;
+  resolve?.($('#planDialog').returnValue === 'ok' ? ($('#dialogInput').required ? Number($('#dialogInput').value) : true) : false);
+});
+function fullPlan(){
+  const out = cloneData(PLAN);
+  out.furniture = cloneData(state.furniture);
+  out.rooms = out.rooms.map(r => ({...r,...state.rooms[r.id]}));
+  out.editor = {demolished:cloneData(state.demolished),measures:cloneData(state.measures)};
+  return out;
+}
+function installPlan(p, restore=false){
+  save(); window.View3D?.preparePlan();
+  bindPlan(p);
+  Object.keys(panes).forEach(k => delete panes[k]);
+  try { Object.assign(panes,JSON.parse(localStorage.getItem(PANES())) || {}); } catch(e) {}
+  drawer(null); state = (restore && load()) || defaultState();
+  ui.sel = null; ui.mA = null; ui.mCur = null; setTool('select');
+  undoStack.length = redoStack.length = 0;
+  document.querySelector('[data-full-cut]').dataset.cut = H;
+  loadUnderlay(); renderOpenings(); renderDims(); fitView(); renderAll();
+  window.View3D?.replacePlan(); save();
+}
+async function openPlanText(text){
+  let p;
+  try { if (text.length > 5000000) throw new Error('5 MB'); const input = JSON.parse(text);
+    // Retain compatibility with upstream furniture-only exports.
+    const legacy = input && !input.walls && Array.isArray(input.furniture);
+    p = validatePlan(legacy ? {...fullPlan(), furniture:input.furniture, rooms:ROOMS.map(r => ({...r,...input.rooms?.[r.id]})), editor:{demolished:input.demolished,measures:input.measures}} : input); }
+  catch (e){ await askInPage(tr('无法打开文件','Cannot open file'),tr('无效的平面图','Invalid plan')+': '+e.message); return false; }
+  const ok = await askInPage(tr('打开平面图','Open plan'), tr('当前修改会保留在本机。导入文件将替换当前平面图，并清空撤销历史。','Current edits are saved in this browser. The file will replace the active plan and clear its undo history.')+'\n'+p.name);
+  if (!ok) return false;
+  while (switching) await new Promise(resolve => setTimeout(resolve,100));
+  installPlan(p); toast(tr('方案已导入','Plan imported')); return true;
+}
+$('#exportJson').onclick = () => download(PLAN.id+'.json',new Blob([JSON.stringify(fullPlan(),null,2)],{type:'application/json'}));
+$('#importJson').onclick = () => $('#fileIn').click();
+$('#fileIn').onchange = async e => {
+  const file = e.target.files[0]; e.target.value = ''; if (!file) return;
+  try { await openPlanText(await file.text()); } catch(e){ toast(tr('无法读取文件','Could not read file')); }
+};
+$('#reset').onclick = async () => {
+  if (await askInPage(tr('重置为默认方案','Reset to default'),tr('恢复为默认设计方案？（可撤销）','Reset to the default design? (undoable)'))){
+    const b = snap(); state = defaultState(); ui.sel = null; commit(b); renderAll();
+  }
+};
+async function clearLayout(){
+  const n = state.furniture.length;
+  if (!n) return toast(tr('当前没有布置任何家具','There is no furniture to clear'));
+  if (!await askInPage(tr('清空布置','Clear layout'),tr(`确定清空全部 ${n} 件家具 / 家电吗？`, `Remove all ${n} furniture / appliance items?`))) return;
+  ui.sel = null; mutate(() => state.furniture = []); toast(tr('已清空布置，可点「撤销」恢复','Layout cleared — Undo to restore'));
+}
+async function loadQueryPlan(){
+  const path = new URLSearchParams(location.search).get('plan'); if (!path) return;
+  // Only files in the local plans directory; never arbitrary URLs or traversal.
+  if (!/^plans\/[A-Za-z0-9_-]+\.json$/.test(path)) return toast(tr('无效的平面图路径','Invalid plan path'));
+  const initial = snap();
+  try {
+    const response = await fetch(path); if (!response.ok) throw new Error(response.status);
+    const text = await response.text(); if (text.length > 5000000) throw new Error('5 MB');
+    const p = validatePlan(JSON.parse(text));
+    if (snap() !== initial && !await askInPage(tr('打开平面图','Open plan'),tr('当前修改会保留在本机。导入文件将替换当前平面图，并清空撤销历史。','Current edits are saved in this browser. The file will replace the active plan and clear its undo history.'))) return;
+    while (switching) await new Promise(resolve => setTimeout(resolve,100));
+    installPlan(p,true);
+  } catch(e){ toast(tr('无法加载平面图，请通过本地 HTTP 服务打开页面或使用文件菜单。','Could not load plan. Use a local HTTP server or the File menu.')); }
+}
+
+let underlay = null, underlayMode = '', underlayPoints = [], underlayDrag = null;
+const underlayKey = () => STORE+':underlay';
+function loadUnderlay(){
+  underlay = null; underlayMode = ''; underlayPoints = []; underlayDrag = null;
+  try {
+    const u = JSON.parse(localStorage.getItem(underlayKey()));
+    if (u && /^data:image\/(png|jpeg|webp);base64,/.test(u.src) && [u.x,u.y,u.scale,u.width,u.height,u.opacity].every(Number.isFinite) && u.width > 0 && u.height > 0 && u.scale > 0 && u.opacity >= 0 && u.opacity <= 1) underlay = u;
+  } catch(e) {}
+  renderUnderlay();
+}
+function saveUnderlay(){
+  try { localStorage.setItem(underlayKey(),JSON.stringify(underlay)); }
+  catch(e){ toast(tr('本机存储已满，底图只保留到关闭页面。请使用更小的图片。','Browser storage is full. The underlay will last only until this page closes. Use a smaller image.')); }
+}
+function renderUnderlay(){
+  const g = $('#gUnderlay'); g.replaceChildren();
+  svg.classList.toggle('has-underlay',!!underlay?.show);
+  if (underlay?.show){
+    const img = document.createElementNS('http://www.w3.org/2000/svg','image');
+    const u = underlay;
+    Object.entries({href:u.src,x:u.x,y:u.y,width:u.width*u.scale,height:u.height*u.scale,opacity:u.opacity,preserveAspectRatio:'none'}).forEach(([k,v]) => img.setAttribute(k,v));
+    g.appendChild(img);
+    underlayPoints.forEach(p => {
+      const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      Object.entries({cx:p.x,cy:p.y,r:7/view.s,fill:'#b5653a',stroke:'#fff','stroke-width':2/view.s}).forEach(([k,v]) => c.setAttribute(k,v)); g.appendChild(c);
+    });
+  }
+  $('#underlayHint').hidden = !underlayMode;
+  $('#underlayHint').textContent = underlayMode === 'calibrate'
+    ? tr('点击底图上的两个点 · Esc 取消','Click two points on the image · Esc cancels')
+    : tr('拖动移动底图 · Esc 完成','Drag to move the image · Esc finishes');
+}
+$('#underlayBtn').onclick = async () => {
+  if (is3D()) await setView('2d');
+  $('#underlayOpacity').value = underlay?.opacity ?? .5; $('#underlayShow').checked = underlay?.show ?? true;
+  $('#underlayCalibrate').disabled = $('#underlayMove').disabled = !underlay;
+  $('#underlayDialog').showModal();
+};
+$('#underlayClose').onclick = () => $('#underlayDialog').close();
+$('#underlayOpacity').oninput = e => { if (underlay){ underlay.opacity = +e.target.value; renderUnderlay(); saveUnderlay(); } };
+$('#underlayShow').onchange = e => { if (underlay){ underlay.show = e.target.checked; renderUnderlay(); saveUnderlay(); } };
+$('#underlayFile').onchange = async e => {
+  const file = e.target.files[0]; e.target.value = ''; if (!file) return;
+  if (!['image/png','image/jpeg','image/webp'].includes(file.type) || file.size > 3000000) return toast(tr('请使用不超过 3 MB 的 PNG、JPEG 或 WebP 图片。','Use a PNG, JPEG or WebP image up to 3 MB.'));
+  const planID = PLAN.id;
+  try {
+    const src = await new Promise((resolve,reject) => { const r = new FileReader(); r.onload = () => resolve(r.result); r.onerror = reject; r.readAsDataURL(file); });
+    const img = new Image(); img.src = src; await img.decode();
+    if (PLAN.id !== planID) return;
+    if (!img.naturalWidth || img.naturalWidth*img.naturalHeight > 40000000) throw new Error('size');
+    const b = planExtents(PLAN);
+    underlay = {src,x:0,y:0,width:img.naturalWidth,height:img.naturalHeight,scale:(b.x1-b.x0)/img.naturalWidth,opacity:.5,show:true};
+    $('#underlayOpacity').value = .5; $('#underlayShow').checked = true;
+    $('#underlayCalibrate').disabled = $('#underlayMove').disabled = false;
+    renderUnderlay(); saveUnderlay();
+  } catch(e){ toast(tr('无法读取图片','Could not read image')); }
+};
+function beginUnderlay(mode){
+  if (!underlay) return; underlay.show = true; underlayMode = mode; underlayPoints = [];
+  $('#underlayDialog').close(); renderUnderlay();
+}
+$('#underlayCalibrate').onclick = () => beginUnderlay('calibrate');
+$('#underlayMove').onclick = () => beginUnderlay('move');
+svg.addEventListener('pointerdown',async e => {
+  if (is3D() || !underlay?.show || e.button !== 0 || (!underlayMode && !e.altKey)) return;
+  e.preventDefault(); e.stopImmediatePropagation(); const p = toMM(e);
+  if (underlayMode === 'calibrate'){
+    if (underlayPoints.length >= 2) return;
+    underlayPoints.push({x:p.x,y:p.y}); renderUnderlay();
+    if (underlayPoints.length !== 2) return;
+    const [a,b] = underlayPoints, measured = Math.hypot(b.x-a.x,b.y-a.y), u = underlay;
+    if (measured*view.s < 8){ underlayPoints.pop(); return; }
+    underlayMode = ''; renderUnderlay();
+    const mm = await askInPage(tr('标定底图','Calibrate underlay'),tr('输入两点间的实际距离。','Enter the real distance between the two points.'),tr('距离 (mm)','Distance (mm)'));
+    if (mm && Number.isFinite(mm) && mm > 0 && underlay === u){
+      const factor = mm/measured;
+      // Anchor the first clicked point, so calibration does not jump away.
+      u.x = a.x-(a.x-u.x)*factor; u.y = a.y-(a.y-u.y)*factor; u.scale *= factor; saveUnderlay();
+    }
+    underlayPoints = []; renderUnderlay();
+  } else {
+    underlayDrag = {id:e.pointerId,start:p,x:underlay.x,y:underlay.y}; svg.setPointerCapture(e.pointerId);
+  }
+},true);
+svg.addEventListener('pointermove',e => {
+  if (!underlayDrag || e.pointerId !== underlayDrag.id) return;
+  e.preventDefault(); e.stopImmediatePropagation(); const p = toMM(e);
+  underlay.x = underlayDrag.x+p.x-underlayDrag.start.x; underlay.y = underlayDrag.y+p.y-underlayDrag.start.y; renderUnderlay();
+},true);
+for (const type of ['pointerup','pointercancel']) svg.addEventListener(type,e => {
+  if (!underlayDrag || e.pointerId !== underlayDrag.id) return;
+  e.stopImmediatePropagation(); underlayDrag = null;
+  if (svg.hasPointerCapture(e.pointerId)) svg.releasePointerCapture(e.pointerId);
+  saveUnderlay();
+},true);
+document.addEventListener('keydown',e => {
+  if (e.code !== 'Escape' || !underlayMode) return;
+  e.preventDefault(); e.stopImmediatePropagation(); underlayMode = ''; underlayPoints = []; renderUnderlay();
+},true);
+loadUnderlay();
+
+loadQueryPlan();
+</script>
+<!-- 3D deliberately disabled: offline 2D test fixture. -->
+</body>
+</html>

@@ -1,0 +1,10 @@
+/* Additions keep the upstream paper, oak and charcoal palette. */
+dialog{color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px;max-width:min(500px,calc(100vw - 28px));box-shadow:0 16px 70px #201c1833}
+dialog::backdrop{background:#241f1966}dialog p{white-space:pre-line}dialog .actions{justify-content:flex-end;margin-top:20px}dialog input[type=checkbox]{width:auto;align-self:start}
+#underlayHint{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:12;background:var(--ink);color:white;padding:10px 18px;border-radius:10px;max-width:90vw;pointer-events:none}
+#plan.has-underlay #gRooms{opacity:.4}
+#plan.has-underlay #gUnderlay{pointer-events:none}
+.brand b{max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:600px){header{gap:4px;padding:6px}.brand{order:-1;width:100%}.brand b{max-width:95vw}.btn{padding:5px 7px}#langSel .btn{min-width:28px}.menu-pop{max-height:65vh;overflow:auto}#modehint{max-width:90%;border-radius:10px}.range input{max-width:80px}}
+
+body.busy details.menu{pointer-events:none;opacity:.5}

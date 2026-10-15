@@ -1,0 +1,16 @@
+<dialog id="planDialog" aria-labelledby="planDialogTitle"><form method="dialog">
+  <h3 id="planDialogTitle"></h3><p id="planDialogText"></p>
+  <div class="form"><label id="dialogInputLabel" class="full"><span id="dialogInputText"></span><input id="dialogInput" type="number" min="1" step="any"></label></div>
+  <div class="actions"><button class="btn" value="cancel" id="dialogCancel"></button><button class="btn primary" value="ok" id="dialogOK"></button></div>
+</form></dialog>
+<dialog id="underlayDialog" aria-labelledby="underlayTitle">
+  <h3 id="underlayTitle" data-en="Tracing underlay">描图底图</h3>
+  <p data-en="Load an image, then calibrate two points. Alt-drag moves it in 2D. The image is stored only in this browser, separately for each plan.">加载图片后标定两点。按住 Alt 拖动平移底图。</p>
+  <div class="form">
+    <label class="full"><span data-en="Image (PNG, JPEG, WebP)">图片</span><input id="underlayFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
+    <label><span data-en="Opacity">不透明度</span><input id="underlayOpacity" type="range" min="0" max="1" step=".05"></label>
+    <label><span data-en="Show underlay">显示底图</span><input id="underlayShow" type="checkbox"></label>
+  </div>
+  <div class="actions"><button class="btn" id="underlayCalibrate" data-en="Calibrate two points">标定两点</button><button class="btn" id="underlayMove" data-en="Move image">移动底图</button><button class="btn" id="underlayClose" data-en="Done">完成</button></div>
+</dialog>
+<div id="underlayHint" hidden></div>
