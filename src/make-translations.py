@@ -131,7 +131,8 @@ Oak desk|Дубовый письменный стол
 Podium / block|Подиум / блок
 Shelved niche|Ниша с полками
 Heated towel rail|Полотенцесушитель
-Ceiling rain shower|Потолочный душ'''
+Ceiling rain shower|Потолочный душ
+Round stacking cabinet|Круглая тумба-модуль'''
 ru.update(dict(s.split('|',1) for s in pairs.splitlines()))
 ru['Could not save locally. Export JSON to keep a backup.']='Не удалось сохранить в браузере. Экспортируйте JSON для резервной копии.'
 ru['Approximate 2026 prices, ₽/m². Materials + 5% waste; labour, delivery and underlay excluded. Not a shop quotation.']='Цены на 2026 год — ориентировочно, ₽/м². Материалы + 5% запаса; без работ, доставки и подложки. Не предложение магазина.'

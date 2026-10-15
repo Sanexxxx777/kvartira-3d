@@ -137,6 +137,16 @@
       if (f.humid) g.add(cyl(.1, .11, .36, mat('#f4f4f2', {roughness:.3}), w*.3, ht + .02, 0, 32));
       break;
     }
+    case 'roundcab': {
+      // round stacking cabinet (Componibili-like): Ø = min(w, d), ~190 mm modules, each with a joint groove and a finger hole at the front; props: ht
+      const r = Math.min(w, d)/2, cm = mat(c, {roughness:.3}), dk = mat(darker(c, .55), {roughness:.5}), ht = M(f.ht || 385), n = Math.max(1, Math.round(ht/.19)), mh = (ht - .012)/n;
+      for (let k = 0; k < n; k++){
+        g.add(cyl(r, r, mh - .004, cm, 0, k*mh, 0, 48), cyl(r - .004, r - .004, .004, dk, 0, (k + 1)*mh - .004, 0, 48));
+        const hole = rot(cyl(.02, .02, .006, dk, 0, 0, 0, 20), Math.PI/2); hole.position.set(0, k*mh + mh*.55, r - .001); g.add(hole);
+      }
+      g.add(cyl(r, r, .012, cm, 0, ht - .012, 0, 48));
+      break;
+    }
     case 'odesk': {
       // oak desk: transparent acrylic leg at the left end, drawer pedestal on the right, monitor shifted right, soundbar
       const tm = woodM(c), pw = Math.min(.6, w*.38), acr = mat('#e8f1f2', {roughness:.08, transparent:true, opacity:.45}), mx = w*.12;

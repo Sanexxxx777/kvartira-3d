@@ -74,6 +74,7 @@ python3 tests/check.py
 | `niche` — Ниша с полками / Shelved niche | `nw` (**мм**, 500), `nh` (м, 1.1), `ny0` (м, 1), `back` — цвет задника; четыре полки, короб до потолка |
 | `towelrail` — Полотенцесушитель / Heated towel rail | `ht` (м, 1.4), `y0` (м, 0.3) |
 | `rainshower` — Потолочный душ / Ceiling rain shower | `w` — диаметр в **мм**; задавайте `d=w` для круглого символа 2D |
+| `roundcab` — Круглая тумба-модуль / Round stacking cabinet | `ht` (м, 0.385); диаметр = меньшее из `w`, `d`; модули ~0.19 м с отверстием-ручкой |
 
 Числа в скобках — значения по умолчанию. `tallcab` принимает `ht` в метрах (0.1–6; заданная высота ограничивается потолком в 3D), `rows` и `hd`. `rows` — целое 1–20, `hd` — `bar|edge|none`. `mirror.shape:"oval"` включает зеркало без рамы со свечением; без `shape` или с `"rect"` остаётся прямоугольное. У `vanity` можно задать `mirror:false`, чтобы заменить встроенное зеркало отдельным предметом `mirror`, как в ванной демо. Все цвета (`color`, `frame`, `c2`, `top`, `back`) — `#rrggbb`.
 
@@ -208,6 +209,7 @@ Additional furniture types: `hang1`, `hang2`, `oshelf`, `chest`, `topbox`, `hook
 | `niche` — Shelved niche | `nw` (**500 mm**), `nh` (1.1 m), `ny0` (1 m), back color `back`; four shelves in a ceiling-height box |
 | `towelrail` — Heated towel rail | `ht` (1.4 m), `y0` (0.3 m) |
 | `rainshower` — Ceiling rain shower | `w` is the diameter in **mm**; set `d=w` for a circular 2D symbol |
+| `roundcab` — Round stacking cabinet | `ht` (0.385 m); diameter = the smaller of `w`, `d`; ~0.19 m modules with a finger hole |
 
 `tallcab` accepts `ht` (0.1–6 m, explicit height capped at the ceiling in 3D), `rows` and `hd`. `rows` is an integer from 1 to 20; `hd` is `bar|edge|none`. `mirror.shape:"oval"` uses a frameless mirror with edge glow; omitted or `"rect"` keeps the rectangular model. `vanity.mirror:false` hides its built-in mirror so a separate oval mirror can replace it. All colors (`color,frame,c2,top,back`) must be `#rrggbb`.
 
