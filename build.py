@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """Reproducible, dependency-free patches against the pinned upstream page."""
+import argparse
 import hashlib
 import json
 import re
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent
+ap = argparse.ArgumentParser(description='Build the single-file planner with a plan embedded as its default.')
+ap.add_argument('--plan', default=str(ROOT/'plans/khrushchev-gi-3k.json'), help='plan JSON to embed (default: the demo flat)')
+ap.add_argument('--out', default=str(ROOT/'index.html'), help='output HTML (default: index.html)')
+args = ap.parse_args()
 UPSTREAM_SHA256 = '66432359c7043ca35f2318c33a4b81bcb179df968d0e94b235d323881d2ca353'
 raw = (ROOT/'vendor/floorplan-3d.upstream.html').read_bytes()
 assert hashlib.sha256(raw).hexdigest() == UPSTREAM_SHA256, 'Upstream SHA256 mismatch; review patches before updating the pin.'
@@ -22,7 +27,7 @@ def section(start,end,new,label):
     assert a < b, label
     patch(html[a:b],new,label)
 def safe_json(v): return json.dumps(v,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')
-plan = json.loads((ROOT/'plans/khrushchev-gi-3k.json').read_text())
+plan = json.loads(Path(args.plan).read_text())
 types = sorted(set(re.findall(r"case '([^']+)'",html[html.index('function buildFurniture'):html.index('function clearGroup')]+module('types_3d.js'))))
 data = source('plan-data.js').replace('__DEFAULT_PLAN__',safe_json(plan)).replace('__FURNITURE_TYPES__',safe_json(types))
 section('/* ============================================================\n *  户型数据','const MATS =',data+'\n','plan data')
@@ -88,7 +93,7 @@ patch('        <button class="btn danger" id="reset"','        <button class="bt
 patch('      <button class="btn chip" data-lang="en" title="English">EN</button>','      <button class="btn chip" data-lang="en" title="English">EN</button>\n      <button class="btn chip" data-lang="ru" title="Русский">RU</button>','Russian language button')
 patch("const LANG_KEY = 'huxing-lang';", "const LANG_KEY = 'kvartira-3d:language';",'language preference key')
 patch("const LANGS = ['zh', 'zht', 'en'];", "const LANGS = ['zh', 'zht', 'en', 'ru'];",'Russian language option')
-patch("let LANG = (() => { try { const l = localStorage.getItem(LANG_KEY); return LANGS.includes(l) ? l : 'zh'; } catch(e) { return 'zh'; } })();", "let LANG = (() => { const fallback = navigator.language.toLowerCase().startsWith('ru') ? 'ru' : 'zh'; try { const l = localStorage.getItem(LANG_KEY); return LANGS.includes(l) ? l : fallback; } catch(e) { return fallback; } })();",'Russian locale default')
+patch("let LANG = (() => { try { const l = localStorage.getItem(LANG_KEY); return LANGS.includes(l) ? l : 'zh'; } catch(e) { return 'zh'; } })();", "let LANG = (() => { const nl = (navigator.language || '').toLowerCase(); const fallback = nl.startsWith('ru') ? 'ru' : /^zh-(tw|hk|mo)|^zh-hant/.test(nl) ? 'zht' : nl.startsWith('zh') ? 'zh' : 'en'; try { const l = localStorage.getItem(LANG_KEY); return LANGS.includes(l) ? l : fallback; } catch(e) { return fallback; } })();",'browser-locale default: ru / zh / zh-Hant / else en')
 # Compile template translations as literal pattern replacements, without eval.
 ru=json.loads(source('ru.json')); plain={}; patterns=[]
 def split_template(s):
@@ -123,5 +128,5 @@ patch('fitView(); renderAll();\n</script>', 'fitView(); renderAll();\n'+source('
 # Each static label must have a Russian entry. Dynamic strings are checked by tests/check.py.
 for text in re.findall(r'data-en(?:-title)?="([^"]*)"',html):
     assert text in ru, 'Missing Russian static text: '+text
-(ROOT/'index.html').write_text(html)
-print(f'Built index.html: {len(html.encode()):,} bytes, {len(patches)} exact-once patches; upstream SHA256 verified.')
+Path(args.out).write_text(html)
+print(f'Built {Path(args.out).name}: {len(html.encode()):,} bytes, {len(patches)} exact-once patches; upstream SHA256 verified.')

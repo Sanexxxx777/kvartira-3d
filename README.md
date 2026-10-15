@@ -21,7 +21,7 @@ python3 -m http.server 8000 --bind 127.0.0.1
 
 Откройте `http://127.0.0.1:8000/`. Для загрузки файла по URL: `http://127.0.0.1:8000/?plan=plans/khrushchev-gi-3k.json`.
 
-Сборка использует только стандартную библиотеку Python 3. `index.html` — готовый результат, его следует хранить в репозитории для GitHub Pages. Сборка сверяет SHA256 файла upstream, затем выполняет 64 замены с проверкой единственного совпадения. При изменении upstream она завершается ошибкой. Не редактируйте `index.html` вручную: исходники дополнений лежат в `src/`, неизменённые предоставленные модули — в `modules/`.
+Сборка использует только стандартную библиотеку Python 3. `index.html` — готовый результат, его следует хранить в репозитории для GitHub Pages. Сборка сверяет SHA256 файла upstream, затем выполняет 67 замен с проверкой единственного совпадения. При изменении upstream она завершается ошибкой. Не редактируйте `index.html` вручную: исходники дополнений лежат в `src/`, неизменённые предоставленные модули — в `modules/`. Свою планировку можно встроить вместо примера: `python3 build.py --plan plans/моя.json --out my.html`.
 
 2D работает без загрузки библиотек. Для 3D браузер загружает **three@0.160.0** с jsDelivr, как в исходном проекте. Загрузка `?plan=...` требует HTTP; при открытии через `file://` используйте меню **Файл → Открыть планировку…**. Серверная часть и сборщик npm не нужны.
 
@@ -162,7 +162,7 @@ window.View3D.look(4200, 6500, 1.6, 2160, 5000, 1.1);
 
 # English
 
-**kvartira-3d** is a data-driven fork of [floorplan-3d](https://github.com/wy51ai/floorplan-3d): an SVG furniture editor and Three.js apartment viewer with orbit/walk modes, doors, sun/night, room areas, flooring estimates, undo/redo, PNG export, full-plan JSON exchange, additional furniture and lighting, and a calibrated image underlay. Russian is selected for a Russian browser locale unless a saved language preference exists. English, Simplified Chinese and Traditional Chinese remain available.
+**kvartira-3d** is a data-driven fork of [floorplan-3d](https://github.com/wy51ai/floorplan-3d): an SVG furniture editor and Three.js apartment viewer with orbit/walk modes, doors, sun/night, room areas, flooring estimates, undo/redo, PNG export, full-plan JSON exchange, additional furniture and lighting, and a calibrated image underlay. The interface follows the browser locale (Russian, Simplified or Traditional Chinese, otherwise English) unless a saved language preference exists.
 
 Live demo: https://shulgin.is-a.dev/kvartira-3d/ (runs in the browser, nothing to install).
 
@@ -174,7 +174,7 @@ python3 tests/check.py
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
-Open `http://127.0.0.1:8000/`. No build dependencies beyond Python 3; Node is used only by the checks. The generated `index.html` should be tracked for GitHub Pages. Upstream is pinned by SHA256 and all 64 patches require exactly one matching anchor. Sources live in `src/`; provided modules remain unchanged. The browser's 3D module still loads Three.js **0.160.0** from jsDelivr. 2D does not depend on that download.
+Open `http://127.0.0.1:8000/`. No build dependencies beyond Python 3; Node is used only by the checks. The generated `index.html` should be tracked for GitHub Pages. Upstream is pinned by SHA256 and all 67 patches require exactly one matching anchor. Sources live in `src/`; provided modules remain unchanged. To embed your own plan as the default: `python3 build.py --plan plans/mine.json --out mine.html`. The browser's 3D module still loads Three.js **0.160.0** from jsDelivr. 2D does not depend on that download.
 
 `?plan=plans/khrushchev-gi-3k.json` fetches a relative file over HTTP. Only `plans/<letters-digits-underscores-hyphens>.json` paths are accepted. Local `file://` use can load JSON through **File → Open plan**. JSON replacement requires an in-page confirmation and clears undo history; it saves current local edits first. **Export plan JSON** saves the whole active plan and editor state. Legacy furniture-only upstream exports also work. File import applies file contents; URL loading restores existing edits for that ID. Reset restores the active plan's original furniture, materials and editor state and is undoable.
 
