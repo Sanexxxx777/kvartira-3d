@@ -2,7 +2,7 @@
 
 План квартиры как JSON: редактор мебели в SVG и интерактивная сцена Three.js. Форк [floorplan-3d](https://github.com/wy51ai/floorplan-3d) с русским интерфейсом, сменными планировками, дополнительной мебелью и освещением, подложкой для обводки и клавишами, работающими в любой раскладке.
 
-**Демо:** https://sanexxxx777.github.io/kvartira-3d/ — открывается в браузере, установка не нужна.
+**Демо:** https://shulgin.is-a.dev/kvartira-3d/ — открывается в браузере, установка не нужна.
 
 ![Хрущёвка ГИ в 3D, вид сверху](docs/overview-3d.jpg)
 
@@ -164,7 +164,7 @@ window.View3D.look(4200, 6500, 1.6, 2160, 5000, 1.1);
 
 **kvartira-3d** is a data-driven fork of [floorplan-3d](https://github.com/wy51ai/floorplan-3d): an SVG furniture editor and Three.js apartment viewer with orbit/walk modes, doors, sun/night, room areas, flooring estimates, undo/redo, PNG export, full-plan JSON exchange, additional furniture and lighting, and a calibrated image underlay. Russian is selected for a Russian browser locale unless a saved language preference exists. English, Simplified Chinese and Traditional Chinese remain available.
 
-Live demo: https://sanexxxx777.github.io/kvartira-3d/ (runs in the browser, nothing to install).
+Live demo: https://shulgin.is-a.dev/kvartira-3d/ (runs in the browser, nothing to install).
 
 ## Build and run
 
